@@ -68,14 +68,24 @@ class SetupAccountPage extends React.Component {
         console.log('render page');
         return (
             <div>
-                <input type="checkbox" onChange={e => this.onTermsChange(e)} />
+                <h3 className="page__heading">Samo minut, dva...</h3>
+                <div className="main__content">
+                    <label>
+                        <input type="checkbox" onChange={e => this.onTermsChange(e)} />
+                        Pročitao sam, i slažem se sa <a href="#">Uslovima Korišćenja</a>
+                    </label>
 
-                <input type="text" onChange={e => this.onLicenceChange(e)} />
+                    <label htmlFor="plate">Registarska oznaka:</label>
+                    <input type="text" name="plate" className="plate-input" onChange={e => this.onLicenceChange(e)} placeholder="BGXXXXYY" />
 
-                <input type="text" onChange={e => this.onEmailChange(e)} />
+                    <label htmlFor="email">Email za obaveštenja:</label>
+                    <input type="text" name="email" onChange={e => this.onEmailChange(e)} />
 
-                <button onClick={() => this.onNext()}>Next</button>
-                <button onClick={() => this.onSkip()}>Skip</button>
+                    <div className="bottom-buttons">
+                        <button onClick={() => this.onNext()}>Sačuvaj podatke</button>
+                        <a onClick={() => this.onSkip()}>Preskoči</a>
+                    </div>
+                </div>
             </div>
         )
     }

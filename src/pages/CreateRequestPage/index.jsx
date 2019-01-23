@@ -49,9 +49,13 @@ class CreateRequestPage extends React.Component {
 
     return (
       <div>
-        <input placeholder="tablica" onChange={e => this.onChangePlate(e)} />
+      <h3 className="page__heading">Novi zahtev</h3>
+      <div className="main__content">
+        <label htmlFor="plate">Registarska oznaka:</label>
+        <input type="text" name="plate" className="plate-input" placeholder="BGXXXYY" onChange={e => this.onChangePlate(e)} />
 
-        <select onChange={e => this.onMessageChosen(e)}>
+        <label>Poruka vlasniku:</label>
+        <select className="msg__type" onChange={e => this.onMessageChosen(e)}>
           <option value="">Izaberi poruku</option>
           {
             this.state.messages.map(
@@ -60,8 +64,12 @@ class CreateRequestPage extends React.Component {
             )
           }
         </select>
-
-        <button onClick={() => this.onMove()}>POMERI</button>
+        <div className="bottom-buttons">
+            <button onClick={() => this.onMove()}>POMERI</button>
+            <a href="#">Odustani</a>
+        </div>
+        
+      </div>
       </div>
     )
   }
