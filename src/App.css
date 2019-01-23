@@ -1,3 +1,7 @@
+:root {
+  --primary: #CE3300
+}
+
 .App {
   text-align: center;
 }
