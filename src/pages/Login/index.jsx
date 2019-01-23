@@ -1,5 +1,6 @@
 import React from 'react'
 import firebase from '../../services/firebase'
+import logo from '../../img/logo.png'
 import { withRouter } from 'react-router-dom'
 
 class Login extends React.Component {
@@ -48,9 +49,10 @@ class Login extends React.Component {
   render () {
       return (
         <div className="columns is-gapless is-fullheight">
+          <img className="login-logo" src={logo} alt="logo" />
           <div className="column">
-            <button className="button is-success" onClick={() => this.loginGoogle()}>Login with Google</button>
-            <button className="button is-success" onClick={() => this.loginFacebook()}>Login with Facebook</button>
+            <button className="button login-button is-success" onClick={() => this.loginGoogle()}>Login with Google</button>
+            <button className="button login-button is-success" onClick={() => this.loginFacebook()}>Login with Facebook</button>
           </div>
         </div>
       )

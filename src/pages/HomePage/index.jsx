@@ -58,7 +58,6 @@ class Home extends React.Component {
       <div>
         <h2>Nemate ni jedan auto</h2>
         <button onClick={() => this.goToCreateCar()}>Dodaj auto</button>
-        <button onClick={() => this.goToCreateRequest()}>POMERI</button>
       </div>
     )
   }
@@ -86,11 +85,9 @@ class Home extends React.Component {
 
           {
             (this.state.myRequests.length === 0)
-              && <div>Nemate zahteva za pomeranjem</div>
+              && <div>Nikom ne smeta tvoj auto. <h2>za sada...</h2></div>
           }
         </div>
-
-        <button onClick={() => this.goToCreateRequest()}>POMERI</button>
       </div>
     )
   }
@@ -100,19 +97,22 @@ class Home extends React.Component {
 
     return (
       <React.Fragment>
-        <div className="header">
-          <img src={user.photoURL} width="40" />
-          {user.displayName} - {this.state.loginProvider}
-          <button className="button" onClick={() => this.logout()}>Logout</button>
+
+        <div className="content__cover">
+          <img src={user.photoURL} width="100" />
+          <span className="content__username">{user.displayName} - {this.state.loginProvider}</span>
+          <button className="small-button" onClick={() => this.logout()}>Logout</button>
         </div>
 
-        <div>
+        <div className="requests__wrap">
           {
             this.state.myCars.length > 0
               ? this.renderFullPage()
               : this.renderNoCarsPage()
           }
         </div>
+
+        <button className="full-width" onClick={() => this.goToCreateRequest()}>Pomeri i ti nekog</button>
       </React.Fragment>
     )
   }
