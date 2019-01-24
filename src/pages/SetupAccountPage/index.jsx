@@ -76,8 +76,10 @@ class SetupAccountPage extends React.Component {
                     </label>
 
                     <label htmlFor="plate">Registarska oznaka:</label>
-                    <input type="text" name="plate" className="plate-input" onChange={e => this.onLicenceChange(e)} placeholder="BGXXXXYY" />
-
+                    <div className="plate__wrapper">
+                        <span></span>
+                        <input type="text" name="plate" className="plate-input" onChange={e => this.onLicenceChange(e)} placeholder="BGXXXXYY" />
+                    </div>
                     <label htmlFor="email">Email za obaveštenja:</label>
                     <input type="text" name="email" onChange={e => this.onEmailChange(e)} />
 
