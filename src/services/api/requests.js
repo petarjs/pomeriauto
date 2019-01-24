@@ -24,12 +24,50 @@ export default class Requests {
     })
   }
 
+  static getById (id) {
+    const collection = db.collection('requests')
+
+    return new Promise((resolve, reject) => {
+      let data = null
+      collection
+        .doc(id)
+        .get()
+        .then(function(querySnapshot) {
+          resolve(querySnapshot.data())
+        });
+    })
+  }
+
+  static getByLicencePlate (licencePlate) {
+    const collection = db.collection('requests')
+
+    return new Promise((resolve, reject) => {
+      let data = []
+      collection
+        .where('car.licencePlate', '==', licencePlate)
+        .get().then(function(querySnapshot) {
+          querySnapshot.forEach(function(doc) {
+            data.push({
+              id: doc.id,
+              ...doc.data()
+            })
+          });
+
+          if (data.length === 1) {
+            resolve(data[0])
+          } else {
+            resolve(null)
+          }
+        });
+    })
+  }
+
   static onRequestUpdated(id, cb) {
     const collection = db.collection('requests')
 
     collection.doc(id)
       .onSnapshot(function(doc) {
-        cb(doc)
+        cb(doc.data())
       });
   }
 
@@ -38,7 +76,7 @@ export default class Requests {
 
     const collection = db.collection('requests')
 
-    collection.add(data)
+    return collection.add(data)
   }
 
   static updateRequest(id, data) {

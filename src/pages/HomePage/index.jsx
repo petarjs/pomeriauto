@@ -10,25 +10,28 @@ class Home extends React.Component {
   state = {
     messages: [],
     myCars: [],
-    myRequests: []
+    myRequests: [],
+    loginProvider: null
   }
 
   async componentDidMount () {
-    // console.log(getCurrentUser());
-    let messages = await Messages.getAll()
+    let currentUser = getCurrentUser()
+    let providerId = currentUser.providerData[0].providerId
+    let loginProvider = providerId === 'google.com' ? 'google' : 'facebook'
 
-    this.setState({ messages })
+    let [messages, myCars, myRequests] = await Promise.all([
+      Messages.getAll(),
+      Cars.getMyCars(),
+      Requests.getMyRequests()
+    ])
 
-    // Messages.onMessage(doc => console.log('message updated', doc.data()))
+    this.setState({
+      myRequests,
+      messages,
+      myCars,
+      loginProvider
+    })
 
-    let myCars = await Cars.getMyCars()
-    this.setState({ myCars })
-
-    let myRequests = await Requests.getMyRequests()
-    this.setState({ myRequests })
-
-    let a = await Cars.getByLicencePlate('bg123123')
-    console.log(a);
   }
 
   logout () {
@@ -44,6 +47,10 @@ class Home extends React.Component {
 
   goToCreateCar () {
     this.props.history.push('/create-car')
+  }
+
+  goToAnswerRequest(requestId) {
+    this.props.history.push(`/answer-request/${requestId}`)
   }
 
   renderNoCarsPage() {
@@ -66,6 +73,13 @@ class Home extends React.Component {
                 <div>{new Date(request.created).toLocaleString()}</div>
                 <div>{request.message}</div>
                 <div>{request.car.licencePlate}</div>
+                <div>
+                  {
+                    !request.response
+                      ? <button onClick={() => this.goToAnswerRequest(request.id)}>ODGOVORI</button>
+                      : <span>odgovoreno</span>
+                  }
+                </div>
               </div>
             ))
           }
@@ -88,7 +102,7 @@ class Home extends React.Component {
       <React.Fragment>
         <div className="header">
           <img src={user.photoURL} width="40" />
-          {user.displayName}
+          {user.displayName} - {this.state.loginProvider}
           <button className="button" onClick={() => this.logout()}>Logout</button>
         </div>
 

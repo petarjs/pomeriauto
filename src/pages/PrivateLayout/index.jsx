@@ -6,6 +6,8 @@ import SetupAccountPage from '../SetupAccountPage'
 import HomePage from '../HomePage'
 import CreateRequestPage from '../CreateRequestPage'
 import CreateCarPage from '../CreateCarPage'
+import AnswerRequestPage from '../AnswerRequestPage'
+import WaitingRequestPage from '../WaitingRequestPage'
 
 class PrivateLayout extends React.Component {
   render () {
@@ -27,6 +29,8 @@ class PrivateLayout extends React.Component {
             <Route path="/setup-account" exact component={SetupAccountPage} />
             <Route path="/create-request" exact component={CreateRequestPage} />
             <Route path="/create-car" exact component={CreateCarPage} />
+            <Route path="/waiting-request/:requestId" exact component={WaitingRequestPage} />
+            <Route path="/answer-request/:requestId" exact component={AnswerRequestPage} />
           </React.Fragment>
         </Router>
       </div>

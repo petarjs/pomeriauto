@@ -33,15 +33,20 @@ class CreateRequestPage extends React.Component {
 
   async onMove () {
     let user = getCurrentUser()
+    
     let car = await Cars.getByLicencePlate(this.state.licencePlate.toUpperCase())
-    await Requests.createRequest({
+
+    let existingRequest = await Requests.getByLicencePlate(this.state.licencePlate.toUpperCase())
+    console.log(existingRequest);
+
+    let newRequest = await Requests.createRequest({
       car,
       requesterId: user.uid,
       message: this.state.message,
       status: 'pending',
     })
 
-    this.props.history.push('/')
+    this.props.history.push(`/waiting-request/${newRequest.id}`)
   }
 
   render () {
