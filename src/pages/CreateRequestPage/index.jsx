@@ -57,7 +57,10 @@ class CreateRequestPage extends React.Component {
       <h3 className="page__heading">Novi zahtev</h3>
       <div className="main__content">
         <label htmlFor="plate">Registarska oznaka:</label>
-        <input type="text" name="plate" className="plate-input" placeholder="BGXXXYY" onChange={e => this.onChangePlate(e)} />
+        <div className="plate__wrapper">
+          <span></span>
+          <input type="text" name="plate" className="plate-input" placeholder="BGXXXYY" onChange={e => this.onChangePlate(e)} />
+        </div>
 
         <label>Poruka vlasniku:</label>
         <select className="msg__type" onChange={e => this.onMessageChosen(e)}>
