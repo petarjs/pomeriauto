@@ -139,6 +139,38 @@ button.small-button {
   width: 80%;
   font-size: 1.5rem;
   margin: 0 10%;
+  position: relative;
+}
+
+.login-button-text {
+  line-height: 32px;
+  vertical-align: middle;
+}
+
+.login-button:not(:last-child) {
+  margin-bottom: 1rem;
+}
+
+.login-button.login-button--facebook {
+  background-color: #4267b2;
+}
+
+.login-button svg {
+  vertical-align: middle;
+  margin-right: 0.5rem;
+  height: 1.6rem;
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.login-button path {
+  fill: white;
+}
+
+.login-button.login-button--google {
+  background-color: #DB4437;
 }
 
 a {
