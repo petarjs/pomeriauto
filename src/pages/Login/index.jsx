@@ -10,7 +10,9 @@ class Login extends React.Component {
     let googleAuthProvider = new firebase.auth.GoogleAuthProvider()
 
     let result = firebase
-        .auth()
+        .auth({
+          signInFlow: ("matchMedia" in window && window.matchMedia('(display-mode: standalone)').matches) ? "popup" : "redirect"
+        })
         .signInWithPopup(googleAuthProvider)
         .then(result => {
           let token = result.credential.accessToken;
