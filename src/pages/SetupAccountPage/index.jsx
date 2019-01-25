@@ -3,9 +3,11 @@ import { Redirect, withRouter } from 'react-router-dom'
 import Settings from '../../services/api/settings'
 import Cars from '../../services/api/cars'
 import { getCurrentUser } from '../../services/auth'
+import Loading from '../../components/Loading';
 
 class SetupAccountPage extends React.Component {
     state = {
+        loading: true,
         settings: null,
         termsAccepted: null,
         notificationEmail: null,
@@ -17,7 +19,7 @@ class SetupAccountPage extends React.Component {
 
         console.log({settings});
 
-        this.setState({ settings })
+        this.setState({ settings, loading: false })
     }
 
     onTermsChange(e) {
@@ -38,17 +40,26 @@ class SetupAccountPage extends React.Component {
             return
         }
 
-        await Settings.saveMySettings({
-            termsAccepted: this.state.termsAccepted,
-            notificationEmail: this.state.notificationEmail
-        })
+        this.setState({ loading: true })
 
-        await Cars.addMyCar({
-            ownerId: getCurrentUser().uid,
-            licencePlate: this.state.licencePlate
-        })
+        try {
+            await Settings.saveMySettings({
+                termsAccepted: this.state.termsAccepted,
+                notificationEmail: this.state.notificationEmail
+            })
 
-        this.props.history.push('/')
+            await Cars.addMyCar({
+                ownerId: getCurrentUser().uid,
+                licencePlate: this.state.licencePlate
+            })
+
+            this.setState({ loading: false })
+
+            this.props.history.push('/')
+        } catch(ex) {
+            this.setState({ loading: false })
+            alert(ex)
+        }
     }
 
     async onSkip () {
@@ -56,7 +67,7 @@ class SetupAccountPage extends React.Component {
             alert('Prihvati uslove')
             return
         }
-        
+
         await Settings.saveMySettings({
             termsAccepted: this.state.termsAccepted,
         })
@@ -93,6 +104,10 @@ class SetupAccountPage extends React.Component {
     }
 
     render () {
+        if (this.state.loading) {
+            return <Loading />
+        }
+
         return (
             <React.Fragment>
                 {

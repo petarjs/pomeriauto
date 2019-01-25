@@ -1,18 +1,20 @@
 import React from 'react'
 import firebase from '../../services/firebase'
-import logo from '../../img/logo.png'
+import logo from '../../img/logo-space.png'
 import { withRouter } from 'react-router-dom'
 import { ReactComponent as FacebookIcon } from './facebook.svg';
 import { ReactComponent as GoogleIcon } from './google.svg';
+
+// {
+//   signInFlow: ("matchMedia" in window && window.matchMedia('(display-mode: standalone)').matches) ? "popup" : "redirect"
+// }
 
 class Login extends React.Component {
   loginGoogle () {
     let googleAuthProvider = new firebase.auth.GoogleAuthProvider()
 
     let result = firebase
-        .auth({
-          signInFlow: ("matchMedia" in window && window.matchMedia('(display-mode: standalone)').matches) ? "popup" : "redirect"
-        })
+        .auth()
         .signInWithPopup(googleAuthProvider)
         .then(result => {
           let token = result.credential.accessToken;

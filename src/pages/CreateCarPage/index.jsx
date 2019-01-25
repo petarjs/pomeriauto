@@ -28,16 +28,21 @@ class CreateCarPage extends React.Component {
     let car = await Cars.getByLicencePlate(this.state.licencePlate)
 
     if (car) {
-      alert('Vec je dodat auto sa ovom tablicom')
       return
     }
 
-    await Cars.addMyCar({
-      licencePlate: this.state.licencePlate.toUpperCase(),
-      ownerId: user.uid
-    })
+    try {
+      await Cars.addMyCar({
+        licencePlate: this.state.licencePlate.toUpperCase(),
+        ownerId: user.uid
+      })
 
-    this.props.history.push('/')
+      this.props.history.push('/')
+    } catch (ex) {
+      alert(ex)
+    }
+
+
   }
 
   render () {

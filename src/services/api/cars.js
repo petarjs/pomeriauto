@@ -72,7 +72,12 @@ export default class Cars {
       });
   }
 
-  static addMyCar(data) {
+  static async addMyCar(data) {
+    let existingCar = await Cars.getByLicencePlate(data.licencePlate)
+    if(existingCar) {
+      throw Error('Ne mozete registrovati auto jer vec postoji auto registrovan sa ovom tablicom!')
+    }
+
     data.created = new Date().valueOf()
 
     const collection = db.collection('cars')
