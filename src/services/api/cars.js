@@ -39,10 +39,9 @@ export default class Cars {
         });
     })
   }
-  
+
   static getByLicencePlate (licencePlate) {
     const collection = db.collection('cars')
-
     return new Promise((resolve, reject) => {
       let data = []
       collection
@@ -75,7 +74,7 @@ export default class Cars {
 
   static addMyCar(data) {
     data.created = new Date().valueOf()
-  
+
     const collection = db.collection('cars')
 
     return collection.add(data)

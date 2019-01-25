@@ -11,6 +11,7 @@ class Home extends React.Component {
     messages: [],
     myCars: [],
     myRequests: [],
+    mySentRequests: [],
     loginProvider: null
   }
 
@@ -19,14 +20,33 @@ class Home extends React.Component {
     let providerId = currentUser.providerData[0].providerId
     let loginProvider = providerId === 'google.com' ? 'google' : 'facebook'
 
-    let [messages, myCars, myRequests] = await Promise.all([
+    let [
+      messages,
+      myCars,
+      myRequests,
+      mySentRequests
+    ] = await Promise.all([
       Messages.getAll(),
       Cars.getMyCars(),
-      Requests.getMyRequests()
+      Requests.getMyRequests(),
+      Requests.getMySentRequests()
     ])
+
+    Requests.onNew(async () => {
+      this.setState({
+        myRequests: await Requests.getMyRequests()
+      })
+    })
+
+    Requests.onNewSent(async () => {
+      this.setState({
+        mySentRequests: await Requests.getMySentRequests()
+      })
+    })
 
     this.setState({
       myRequests,
+      mySentRequests,
       messages,
       myCars,
       loginProvider
@@ -76,7 +96,32 @@ class Home extends React.Component {
                   {
                     !request.response
                       ? <button onClick={() => this.goToAnswerRequest(request.id)}>ODGOVORI</button>
-                      : <span>odgovoreno</span>
+                      : <span>odgovoreno, {request.response}</span>
+                  }
+                </div>
+              </div>
+            ))
+          }
+
+          {
+            (this.state.myRequests.length === 0)
+              && <div className="no-msgs"><h3>Nikom ne smeta tvoj auto.</h3><h2>za sada...</h2></div>
+          }
+        </div>
+
+        <div>
+          <h2>Zahtevi koje sam ja poslao</h2>
+          {
+            this.state.mySentRequests.map(request => (
+              <div key={request.id}>
+                <div>{new Date(request.created).toLocaleString()}</div>
+                <div>{request.message}</div>
+                <div>{request.car.licencePlate}</div>
+                <div>
+                  {
+                    !request.response
+                      ? <span>Ceka se odgovor</span>
+                      : <span>odgovoreno - {request.response}</span>
                   }
                 </div>
               </div>
@@ -94,6 +139,7 @@ class Home extends React.Component {
 
   render () {
     let user = getCurrentUser()
+    let licencePlate = this.state.myCars.length && this.state.myCars[0].licencePlate
 
     return (
       <React.Fragment>
@@ -101,6 +147,7 @@ class Home extends React.Component {
         <div className="content__cover">
           <img src={user.photoURL} width="100" />
           <span className="content__username">{user.displayName} - {this.state.loginProvider}</span>
+          <span className="content__licence-plate">{licencePlate}</span>
           <button className="small-button" onClick={() => this.logout()}>Logout</button>
         </div>
 

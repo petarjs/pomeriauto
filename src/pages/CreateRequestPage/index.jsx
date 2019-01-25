@@ -33,9 +33,12 @@ class CreateRequestPage extends React.Component {
 
   async onMove () {
     let user = getCurrentUser()
-    
-    let car = await Cars.getByLicencePlate(this.state.licencePlate.toUpperCase())
 
+    let car = await Cars.getByLicencePlate(this.state.licencePlate.toUpperCase())
+    if(!car) {
+      alert('Ne postoji auto sa ovom registracijom! Jos uvek.')
+      return
+    }
     let existingRequest = await Requests.getByLicencePlate(this.state.licencePlate.toUpperCase())
     console.log(existingRequest);
 
@@ -67,7 +70,7 @@ class CreateRequestPage extends React.Component {
           <option value="">Izaberi poruku</option>
           {
             this.state.messages.map(
-              message => 
+              message =>
                 <option key={message.id} value={message.text}>{message.text}</option>
             )
           }
@@ -76,7 +79,7 @@ class CreateRequestPage extends React.Component {
             <button onClick={() => this.onMove()}>POMERI</button>
             <a href="#">Odustani</a>
         </div>
-        
+
       </div>
       </div>
     )

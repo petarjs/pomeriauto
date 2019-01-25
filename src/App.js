@@ -7,6 +7,8 @@ import PrivateRoute from './components/PrivateRoute'
 import PublicRoute from './components/PublicRoute'
 import PrivateLayout from './pages/PrivateLayout'
 
+window.startTimestamp = new Date().valueOf()
+
 class App extends Component {
   render() {
     return (

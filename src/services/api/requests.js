@@ -24,6 +24,28 @@ export default class Requests {
     })
   }
 
+  static getMySentRequests () {
+    const collection = db.collection('requests')
+    let user = getCurrentUser()
+
+    return new Promise(resolve => {
+      let data = []
+      collection
+        .where('requesterId', '==', user.uid)
+        .orderBy('created', 'desc').limit(5)
+        .get().then(function(querySnapshot) {
+          querySnapshot.forEach(function(doc) {
+            data.push({
+              id: doc.id,
+              ...doc.data()
+            })
+          });
+
+          resolve(data)
+        });
+    })
+  }
+
   static getById (id) {
     const collection = db.collection('requests')
 
@@ -68,6 +90,70 @@ export default class Requests {
     collection.doc(id)
       .onSnapshot(function(doc) {
         cb(doc.data())
+      });
+  }
+
+  static onNew (cb) {
+    let user = getCurrentUser()
+
+    db.collection('requests').where('car.ownerId', '==', user.uid)
+      .onSnapshot(function(snapshot) {
+          snapshot.docChanges().forEach(function(change) {
+              if (change.type === 'added') {
+                let data = change.doc.data()
+
+                if (data.created > window.startTimestamp) {
+                  console.log('added', change.doc.data())
+                  cb()
+                }
+              }
+          });
+      });
+  }
+
+  static onNewSent (cb) {
+    let user = getCurrentUser()
+
+    db.collection('requests').where('Id', '==', user.uid)
+      .onSnapshot(function(snapshot) {
+          snapshot.docChanges().forEach(function(change) {
+              if (change.type === 'added') {
+                let data = change.doc.data()
+
+                if (data.created > window.startTimestamp) {
+                  console.log('added', change.doc.data())
+                  cb()
+                }
+              }
+          });
+      });
+  }
+
+  static onModified (cb) {
+    let user = getCurrentUser()
+
+    db.collection('requests').where('car.ownerId', '==', user.uid)
+      .onSnapshot(function(snapshot) {
+          snapshot.docChanges().forEach(function(change) {
+              if (change.type === 'modified') {
+                console.log('modified', change.doc.data())
+                cb()
+              }
+          });
+      });
+  }
+
+  static onRemoved (cb) {
+    let user = getCurrentUser()
+
+    db.collection('requests').where('car.ownerId', '==', user.uid)
+      .onSnapshot(function(snapshot) {
+          snapshot.docChanges().forEach(function(change) {
+              if (change.type === 'removed') {
+                console.log('removed', change.doc.data())
+                cb()
+              }
+          });
       });
   }
 
