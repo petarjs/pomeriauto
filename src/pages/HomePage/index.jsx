@@ -130,7 +130,7 @@ class Home extends React.Component {
 
           {
             (this.state.myRequests.length === 0)
-              && <div className="no-msgs"><h3>Nikom ne smeta tvoj auto.</h3><h2>za sada...</h2></div>
+              && <div className="no-msgs"><h3>Nije ti smetao niciji auto.</h3><h2>do sada...</h2></div>
           }
         </div>
       </div>
