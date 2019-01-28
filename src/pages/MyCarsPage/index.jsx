@@ -6,6 +6,7 @@ import Cars from '../../services/api/cars';
 import CarCard from './CarCard'
 
 import './index.css'
+import Empty from '../../components/Empty';
 
 class MyCarsPage extends React.Component {
     state = { myCars: null, loading: true }
@@ -14,6 +15,16 @@ class MyCarsPage extends React.Component {
         let myCars = await Cars.getMyCars()
 
         this.setState({ myCars, loading: false })
+    }
+
+    renderMyCars () {
+        return (
+            this.state.myCars
+                ? this.state.myCars.map(car => (
+                    <CarCard key={car.id} car={car} />
+                ))
+                : <Loading />
+        )
     }
 
     render () {
@@ -30,11 +41,12 @@ class MyCarsPage extends React.Component {
                 </div>
 
                 {
-                    this.state.myCars
-                        ? this.state.myCars.map(car => (
-                            <CarCard key={car.id} car={car} />
-                        ))
-                        : <Loading />
+                    this.state.myCars.length === 0
+                        ? <Empty
+                            text="Nemate dodatih automobila"
+                            icon="directions_car"
+                        />
+                        : this.renderMyCars()
                 }
             </div>
         )

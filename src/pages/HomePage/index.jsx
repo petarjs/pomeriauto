@@ -12,7 +12,8 @@ class Home extends React.Component {
     myCars: [],
     myRequests: [],
     mySentRequests: [],
-    loginProvider: null
+    loginProvider: null,
+    activeTab: 'moja-parkiranja'
   }
 
   async componentDidMount () {
@@ -78,56 +79,64 @@ class Home extends React.Component {
   renderFullPage() {
     return (
       <div>
-        <div>
-          {
-            this.state.myRequests.map(request => (
-              <div key={request.id}>
-                <div>{new Date(request.created).toLocaleString()}</div>
-                <div>{request.message}</div>
-                <div>{request.car.licencePlate}</div>
-                <div>
-                  {
-                    !request.response
-                      ? <button onClick={() => this.goToAnswerRequest(request.id)}>ODGOVORI</button>
-                      : <span>odgovoreno, {request.response}</span>
-                  }
-                </div>
-              </div>
-            ))
-          }
+        {
+          this.state.activeTab === 'moja-parkiranja'
+            ? <div>
+              {
+                this.state.myRequests.map(request => (
+                  <div key={request.id}>
+                    <div>{new Date(request.created).toLocaleString()}</div>
+                    <div>{request.message}</div>
+                    <div>{request.car.licencePlate}</div>
+                    <div>
+                      {
+                        !request.response
+                          ? <button onClick={() => this.goToAnswerRequest(request.id)}>ODGOVORI</button>
+                          : <span>odgovoreno, {request.response}</span>
+                      }
+                    </div>
+                  </div>
+                ))
+              }
 
-          {
-            (this.state.myRequests.length === 0)
-              && <div className="no-msgs"><h3>Nikom ne smeta tvoj auto.</h3><h2>za sada...</h2></div>
-          }
-        </div>
+              {
+                (this.state.myRequests.length === 0)
+                  && <div className="no-msgs"><h3>Nikom ne smeta tvoj auto.</h3><h2>za sada...</h2></div>
+              }
+            </div>
 
-        <div>
-          <h2>Zahtevi koje sam ja poslao</h2>
-          {
-            this.state.mySentRequests.map(request => (
-              <div key={request.id}>
-                <div>{new Date(request.created).toLocaleString()}</div>
-                <div>{request.message}</div>
-                <div>{request.car.licencePlate}</div>
-                <div>
-                  {
-                    !request.response
-                      ? <span>Ceka se odgovor</span>
-                      : <span>odgovoreno - {request.response}</span>
-                  }
-                </div>
-              </div>
-            ))
-          }
+            : <div>
+              {
+                this.state.mySentRequests.map(request => (
+                  <div key={request.id}>
+                    <div>{new Date(request.created).toLocaleString()}</div>
+                    <div>{request.message}</div>
+                    <div>{request.car.licencePlate}</div>
+                    <div>
+                      {
+                        !request.response
+                          ? <span>Ceka se odgovor</span>
+                          : <span>odgovoreno - {request.response}</span>
+                      }
+                    </div>
+                  </div>
+                ))
+              }
 
-          {
-            (this.state.myRequests.length === 0)
-              && <div className="no-msgs"><h3>Nije ti smetao niciji auto.</h3><h2>do sada...</h2></div>
-          }
-        </div>
+              {
+                (this.state.myRequests.length === 0)
+                  && <div className="no-msgs"><h3>Nije ti smetao niciji auto.</h3><h2>do sada...</h2></div>
+              }
+            </div>
+        }
       </div>
     )
+  }
+
+  setActiveTab (activeTab) {
+    this.setState({
+      activeTab
+    })
   }
 
   render () {
@@ -141,6 +150,25 @@ class Home extends React.Component {
           <img src={user.photoURL} width="100" />
           <span className="content__username">{user.displayName} - {this.state.loginProvider}</span>
           <span className="content__licence-plate">{licencePlate}</span>
+        </div>
+
+        <div className="tabs requests-tabs">
+          <div
+            onClick={() => this.setActiveTab('moja-parkiranja')}
+            className={`
+              tab
+              ${this.state.activeTab === 'moja-parkiranja' ? 'tab--active' : ''}
+            `}>
+              Moja parkiranja
+            </div>
+          <div
+            onClick={() => this.setActiveTab('moji-zahtevi')}
+            className={`
+              tab
+              ${this.state.activeTab === 'moji-zahtevi' ? 'tab--active' : ''}
+            `}>
+              Moji zahtevi
+          </div>
         </div>
 
         <div className="requests__wrap">
