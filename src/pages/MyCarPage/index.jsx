@@ -10,16 +10,38 @@ import './index.css'
 class MyCarPage extends React.Component {
     state = {
         loading: true,
-        carFilename: "",
+        carFilename: '',
         progress: 0,
-        carURL: ""
+        carURL: '',
+        licencePlate: ''
     }
 
     async componentDidMount () {
         let id = this.props.match.params.id
         let car = await Cars.getById(id)
 
-        this.setState({ car, loading: false })
+        this.setState({
+            car,
+            licencePlate: car.licencePlate,
+            loading: false
+        })
+    }
+
+    onLicenceChange = e => this.setState({ licencePlate: e.target.value })
+
+    async onSave () {
+        let id = this.props.match.params.id
+        await Cars.updateMyCar(id, {
+            licencePlate: this.state.licencePlate.toUpperCase()
+        })
+
+        this.props.history.push('/my-cars')
+    }
+
+    async onDelete () {
+        let id = this.props.match.params.id
+        await Cars.deleteMyCar(id)
+        this.props.history.push('/my-cars')
     }
 
     handleUploadStart = () => this.setState({ loading: true, progress: 0 });
@@ -61,7 +83,14 @@ class MyCarPage extends React.Component {
                 :
                     <React.Fragment>
                         {this.state.car.imageUrl && <img className="car__image" alt="Car" src={this.state.car.imageUrl} />}
-                        <div className="car__licence-plate">{this.state.car.licencePlate}</div>
+                        <label htmlFor="plate">Registarska oznaka:</label>
+                        <div className="plate__wrapper">
+                            <span></span>
+                            <input type="text" name="plate" value={this.state.licencePlate} className="plate-input" onChange={e => this.onLicenceChange(e)} placeholder="BGXXXXYY" />
+                        </div>
+
+                        <button onClick={() => this.onSave()}>Sačuvaj podatke</button>
+                        <button onClick={() => this.onDelete()}>Izbrisi auto</button>
 
                         <CustomUploadButton
                             accept="image/*"

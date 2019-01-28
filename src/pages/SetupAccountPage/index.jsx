@@ -16,10 +16,13 @@ class SetupAccountPage extends React.Component {
 
     async componentWillMount () {
         let settings = await Settings.getMySettings()
+        let user = getCurrentUser()
 
-        console.log({settings});
-
-        this.setState({ settings, loading: false })
+        this.setState({
+            settings,
+            notificationEmail: user.providerData[0].email,
+            loading: false
+        })
     }
 
     onTermsChange(e) {
@@ -50,7 +53,7 @@ class SetupAccountPage extends React.Component {
 
             await Cars.addMyCar({
                 ownerId: getCurrentUser().uid,
-                licencePlate: this.state.licencePlate
+                licencePlate: this.state.licencePlate.toUpperCase()
             })
 
             this.setState({ loading: false })
@@ -64,7 +67,7 @@ class SetupAccountPage extends React.Component {
 
     async onSkip () {
         if (!this.state.termsAccepted) {
-            alert('Prihvati uslove')
+            alert('Prihvatite uslove')
             return
         }
 
@@ -93,7 +96,7 @@ class SetupAccountPage extends React.Component {
                     </div>
 
                     <label htmlFor="email">Email za obaveštenja:</label>
-                    <input type="text" name="email" onChange={e => this.onEmailChange(e)} />
+                    <input type="text" name="email" value={this.state.notificationEmail} onChange={e => this.onEmailChange(e)} />
 
                     <div className="bottom-buttons">
                         <button onClick={() => this.onNext()}>Sačuvaj podatke</button>

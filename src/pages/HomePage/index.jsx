@@ -4,6 +4,7 @@ import { getCurrentUser } from '../../services/auth'
 import Messages from '../../services/api/messages'
 import Requests from '../../services/api/requests'
 import Cars from '../../services/api/cars'
+import RequireAccountSetup from '../../components/RequireAccountSetup';
 
 class Home extends React.Component {
   state = {
@@ -156,4 +157,4 @@ class Home extends React.Component {
   }
 }
 
-export default withRouter(Home)
+export default withRouter(RequireAccountSetup(Home))
