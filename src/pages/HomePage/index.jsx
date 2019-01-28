@@ -1,6 +1,5 @@
 import React from 'react'
 import { withRouter, Link } from 'react-router-dom'
-import { logout } from '../../services/auth'
 import { getCurrentUser } from '../../services/auth'
 import Messages from '../../services/api/messages'
 import Requests from '../../services/api/requests'
@@ -52,13 +51,6 @@ class Home extends React.Component {
       loginProvider
     })
 
-  }
-
-  logout () {
-    logout()
-      .then(() => {
-        this.props.history.push('/login')
-      })
   }
 
   goToCreateRequest () {
@@ -148,7 +140,6 @@ class Home extends React.Component {
           <img src={user.photoURL} width="100" />
           <span className="content__username">{user.displayName} - {this.state.loginProvider}</span>
           <span className="content__licence-plate">{licencePlate}</span>
-          <button className="small-button" onClick={() => this.logout()}>Logout</button>
         </div>
 
         <div className="requests__wrap">

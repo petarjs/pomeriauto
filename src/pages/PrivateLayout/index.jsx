@@ -8,19 +8,15 @@ import CreateRequestPage from '../CreateRequestPage'
 import CreateCarPage from '../CreateCarPage'
 import AnswerRequestPage from '../AnswerRequestPage'
 import WaitingRequestPage from '../WaitingRequestPage'
+import SettingsPage from '../SettingsPage'
+import MyCarsPage from '../MyCarsPage'
+import MyCarsAddPage from '../MyCarsAddPage'
+import MyCarPage from '../MyCarPage'
 
 class PrivateLayout extends React.Component {
   render () {
     return (
       <div>
-        <nav className="navbar is-transparent" role="navigation" aria-label="main navigation">
-          <div className="navbar-brand">
-            <Link className="navbar-item" to="/">
-                Pomeriauto
-            </Link>
-          </div>
-        </nav>
-
         <Header />
 
         <Router>
@@ -31,6 +27,10 @@ class PrivateLayout extends React.Component {
             <Route path="/create-car" exact component={CreateCarPage} />
             <Route path="/waiting-request/:requestId" exact component={WaitingRequestPage} />
             <Route path="/answer-request/:requestId" exact component={AnswerRequestPage} />
+            <Route path="/settings" exact component={SettingsPage} />
+            <Route path="/my-cars" exact component={MyCarsPage} />
+            <Route path="/my-cars/new" exact component={MyCarsAddPage} />
+            <Route path="/my-cars/list/:id" component={MyCarPage} />
           </React.Fragment>
         </Router>
       </div>

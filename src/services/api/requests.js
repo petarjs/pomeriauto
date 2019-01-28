@@ -103,7 +103,6 @@ export default class Requests {
                 let data = change.doc.data()
 
                 if (data.created > window.startTimestamp) {
-                  console.log('added', change.doc.data())
                   cb()
                 }
               }
@@ -121,7 +120,6 @@ export default class Requests {
                 let data = change.doc.data()
 
                 if (data.created > window.startTimestamp) {
-                  console.log('added', change.doc.data())
                   cb()
                 }
               }

@@ -1,0 +1,21 @@
+.car-card {
+    text-decoration: none;
+    overflow: hidden;
+    border-radius: 4px;
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 2rem;
+    border: 2px solid #dedede;
+}
+
+.car-card__image {
+    width: 100%;
+    height: 56.25vw;
+    background-size: cover;
+}
+
+.car-card__info {
+    padding: 1rem;
+    font-weight: bold;
+    font-size: 22px;
+}

@@ -91,12 +91,13 @@ class SetupAccountPage extends React.Component {
                         <span></span>
                         <input type="text" name="plate" className="plate-input" onChange={e => this.onLicenceChange(e)} placeholder="BGXXXXYY" />
                     </div>
+
                     <label htmlFor="email">Email za obaveštenja:</label>
                     <input type="text" name="email" onChange={e => this.onEmailChange(e)} />
 
                     <div className="bottom-buttons">
                         <button onClick={() => this.onNext()}>Sačuvaj podatke</button>
-                        <a onClick={() => this.onSkip()}>Preskoči</a>
+                        <a href="" onClick={() => this.onSkip()}>Preskoči</a>
                     </div>
                 </div>
             </div>

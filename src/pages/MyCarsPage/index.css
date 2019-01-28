@@ -1,0 +1,12 @@
+.my-cars {
+    padding: 0 2rem;
+}
+
+.my-cars__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.my-cars__add {
+}

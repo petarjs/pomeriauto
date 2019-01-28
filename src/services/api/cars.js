@@ -40,6 +40,19 @@ export default class Cars {
     })
   }
 
+  static getById (id) {
+    const collection = db.collection('cars')
+
+    return new Promise((resolve, reject) => {
+      collection
+        .doc(id)
+        .get()
+        .then(function(querySnapshot) {
+          resolve(querySnapshot.data())
+        });
+    })
+  }
+
   static getByLicencePlate (licencePlate) {
     const collection = db.collection('cars')
     return new Promise((resolve, reject) => {
@@ -60,6 +73,12 @@ export default class Cars {
             resolve(null)
           }
         });
+    })
+  }
+
+  static setImage (id, url) {
+    return this.updateMyCar(id, {
+      imageUrl: url
     })
   }
 

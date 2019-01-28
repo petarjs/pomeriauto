@@ -12,12 +12,15 @@ const config = {
 };
 
 export let db
-
+export let storageService
+export let storageRef
 
 export function init() {
     firebase.initializeApp(config);
 
     db = firebase.firestore();
+    storageService = firebase.storage();
+    storageRef = storageService.ref();
 }
 
 export default firebase;
