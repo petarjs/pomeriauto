@@ -1,23 +1,130 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { logout } from '../../services/auth'
+import LicencePlateInput from '../../components/LicencePlateInput';
+import CustomUploadButton from 'react-firebase-file-uploader/lib/CustomUploadButton';
+import firebase from '../../services/firebase'
+import Cars from '../../services/api/cars';
+import Loading from '../../components/Loading';
 
 class SettingsPage extends React.Component {
+    state = {
+        licencePlate: '',
+        loading: true,
+        carFilename: '',
+        progress: 0,
+        carURL: '',
+    }
+
+    async componentDidMount () {
+        let car = await Cars.getMyCar()
+
+        this.setState({
+            car,
+            licencePlate: car.licencePlate,
+            loading: false
+        })
+    }
+
+    async onSave () {
+        let id = this.state.car.id
+
+        await Cars.updateMyCar(id, {
+            licencePlate: this.state.licencePlate.toUpperCase()
+        })
+
+        this.props.history.push('/')
+    }
+
     async logout () {
         await logout()
         this.props.history.push('/login')
     }
 
+    handleUploadStart = () => this.setState({ loading: true, progress: 0 });
+
+    handleProgress = progress => this.setState({ progress });
+
+    handleUploadError = error => {
+        this.setState({ loading: false });
+        console.error(error);
+        alert(error)
+    };
+
+    handleUploadSuccess = filename => {
+        this.setState({ carFilename: filename, progress: 100 });
+
+        firebase
+            .storage()
+            .ref('cars')
+            .child(filename)
+            .getDownloadURL()
+            .then(async url => {
+                this.setState({ carURL: url })
+
+                let carId = this.state.car.id
+                await Cars.setImage(carId, url)
+
+                this.setState({ loading: false })
+            });
+    };
+
+    onLicenceChange(e) {
+        this.setState({
+            licencePlate: e.target.value
+        })
+    }
+
     render () {
         return (
-            <React.Fragment>
-                <div>
-                    <Link className="button full-width" to="/my-cars">Moji automobili</Link>
-                </div>
-                <div>
-                    <button className="full-width" onClick={() => this.logout()}>Logout</button>
-                </div>
-            </React.Fragment>
+            this.state.loading
+                ? <Loading />
+                : <React.Fragment>
+                    <div className="page-header">
+                        <div className="title">Podešavanja</div>
+                    </div>
+                    <div className="page-subheader">
+                        <div className="subtitle">
+                            <i className="material-icons">info</i>
+                            Promenite aktivno vozilo za koje želite da primate notifikacije.
+                        </div>
+                    </div>
+
+                    <div className="settings__licence-plate">
+                        <LicencePlateInput
+                            value={this.state.licencePlate}
+                            onLicenceChange={e => this.onLicenceChange(e)}
+                        />
+                    </div>
+
+                    <div>
+                        {this.state.car.imageUrl && <img className="car__image" alt="Car" src={this.state.car.imageUrl} />}
+
+                        <div className="settings-actions">
+                            <CustomUploadButton
+                                accept="image/*"
+                                name="car"
+                                randomizeFilename
+                                storageRef={firebase.storage().ref('cars')}
+                                onUploadStart={this.handleUploadStart}
+                                onUploadError={this.handleUploadError}
+                                onUploadSuccess={this.handleUploadSuccess}
+                                onProgress={this.handleProgress}
+                                className="button button-outline settings-action"
+                            >
+                                Izaberite sliku
+                            </CustomUploadButton>
+
+                            {/* <button className="button button-outline settings-action">Saobrcajna</button> */}
+                        </div>
+                    </div>
+
+
+                    <div>
+                        <button className="full-width" onClick={() => this.logout()}>Logout</button>
+                        <button className="full-width" onClick={() => this.onSave()}>Sačuvaj</button>
+                    </div>
+                </React.Fragment>
         )
     }
 }

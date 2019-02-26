@@ -5,6 +5,7 @@ import { getCurrentUser } from '../../services/auth'
 import Messages from '../../services/api/messages'
 import Requests from '../../services/api/requests'
 import Cars from '../../services/api/cars'
+import LicencePlateInput from '../../components/LicencePlateInput';
 
 class CreateRequestPage extends React.Component {
   state = {
@@ -19,7 +20,7 @@ class CreateRequestPage extends React.Component {
     this.setState({ messages })
   }
 
-  onChangePlate(e) {
+  onLicenceChange(e) {
     this.setState({
       licencePlate: e.target.value
     })
@@ -39,8 +40,9 @@ class CreateRequestPage extends React.Component {
       alert('Ne postoji auto sa ovom registracijom! Jos uvek.')
       return
     }
-    let existingRequest = await Requests.getByLicencePlate(this.state.licencePlate.toUpperCase())
-    console.log(existingRequest);
+
+    // let existingRequest = await Requests.getByLicencePlate(this.state.licencePlate.toUpperCase())
+    // console.log(existingRequest);
 
     let newRequest = await Requests.createRequest({
       car,
@@ -53,17 +55,15 @@ class CreateRequestPage extends React.Component {
   }
 
   render () {
-    let user = getCurrentUser()
-
     return (
       <div>
       <h3 className="page__heading">Novi zahtev</h3>
       <div className="main__content">
-        <label htmlFor="plate">Registarska oznaka:</label>
-        <div className="plate__wrapper">
-          <span></span>
-          <input type="text" name="plate" className="plate-input" placeholder="BGXXXYY" onChange={e => this.onChangePlate(e)} />
-        </div>
+
+        <LicencePlateInput
+          onLicenceChange={e => this.onLicenceChange(e)}
+          value={this.state.licencePlate}
+        />
 
         <label>Poruka vlasniku:</label>
         <select className="msg__type" onChange={e => this.onMessageChosen(e)}>
@@ -76,8 +76,8 @@ class CreateRequestPage extends React.Component {
           }
         </select>
         <div className="bottom-buttons">
-            <button onClick={() => this.onMove()}>POMERI</button>
             <a href="#">Odustani</a>
+            <button onClick={() => this.onMove()}>POMERI</button>
         </div>
 
       </div>

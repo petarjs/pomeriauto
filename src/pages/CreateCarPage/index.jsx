@@ -5,6 +5,7 @@ import { getCurrentUser } from '../../services/auth'
 import Messages from '../../services/api/messages'
 import Requests from '../../services/api/requests'
 import Cars from '../../services/api/cars'
+import LicencePlateInput from '../../components/LicencePlateInput';
 
 class CreateCarPage extends React.Component {
   state = {
@@ -17,7 +18,7 @@ class CreateCarPage extends React.Component {
     this.setState({ messages })
   }
 
-  onChangePlate(e) {
+  onLicenceChange(e) {
     this.setState({
       licencePlate: e.target.value
     })
@@ -46,13 +47,14 @@ class CreateCarPage extends React.Component {
   }
 
   render () {
-    let user = getCurrentUser()
-
     return (
       <div>
-        <input placeholder="tablica" onChange={e => this.onChangePlate(e)} />
+        <LicencePlateInput
+          value={this.state.licencePlate}
+          onLicenceChange={e => this.onLicenceChange(e)}
+        />
 
-        <button onClick={() => this.onCreateCar()}>POMERI</button>
+        <button onClick={() => this.onCreateCar()}>SAČUVAJ</button>
       </div>
     )
   }

@@ -6,6 +6,7 @@ import Cars from '../../services/api/cars'
 import Loading from '../../components/Loading'
 
 import './index.css'
+import LicencePlateInput from '../../components/LicencePlateInput';
 
 class MyCarPage extends React.Component {
     state = {
@@ -83,11 +84,8 @@ class MyCarPage extends React.Component {
                 :
                     <React.Fragment>
                         {this.state.car.imageUrl && <img className="car__image" alt="Car" src={this.state.car.imageUrl} />}
-                        <label htmlFor="plate">Registarska oznaka:</label>
-                        <div className="plate__wrapper">
-                            <span></span>
-                            <input type="text" name="plate" value={this.state.licencePlate} className="plate-input" onChange={e => this.onLicenceChange(e)} placeholder="BGXXXXYY" />
-                        </div>
+
+                        <LicencePlateInput value={this.state.licencePlate} onLicenceChange={e => this.onLicenceChange(e)} />
 
                         <button onClick={() => this.onSave()}>Sačuvaj podatke</button>
                         <button onClick={() => this.onDelete()}>Izbrisi auto</button>

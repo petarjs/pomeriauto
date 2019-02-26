@@ -3,6 +3,7 @@ import { Link, withRouter } from 'react-router-dom'
 import Cars from '../../services/api/cars'
 import { getCurrentUser } from '../../services/auth'
 import Loading from '../../components/Loading'
+import LicencePlateInput from '../../components/LicencePlateInput';
 
 class MyCarsAddPage extends React.Component {
     state = { licencePlate: '', loading: false }
@@ -32,11 +33,11 @@ class MyCarsAddPage extends React.Component {
                 ? <Loading />
                 : <React.Fragment>
                     <Link to="/my-cars">Nazad</Link>
-                    <label htmlFor="plate">Registarska oznaka:</label>
-                    <div className="plate__wrapper">
-                        <span></span>
-                        <input type="text" name="plate" className="plate-input" onChange={e => this.onLicenceChange(e)} placeholder="BGXXXXYY" />
-                    </div>
+
+                    <LicencePlateInput
+                        onLicenceChange={e => this.onLicenceChange(e)}
+                        value={this.state.licencePlate}
+                    />
 
                     <button className="full-width" onClick={() => this.addCar()}>DODAJ</button>
                 </React.Fragment>

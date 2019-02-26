@@ -1,0 +1,41 @@
+.plate__wrapper {
+    border-radius: 4px;
+    display: inline-block;
+    width: 100%;
+    margin-top: 0.25rem;
+    display: flex;
+}
+.plate__wrapper > span {
+    display: inline-block;
+    min-width: 1.6rem;
+    height: 2.85rem;
+    vertical-align: top;
+    background: #36307b;
+    position: relative;
+}
+
+.plate__wrapper > span::after {
+    content: 'SRB';
+    font-size: 0.6rem;
+    position: absolute;
+    bottom: 0;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    width: 100%;
+}
+
+input.plate-input {
+    display: inline-block;
+    margin: 0 0.5rem;
+    border: 0;
+    padding: 0;
+    font-size: 2.3rem;
+    text-transform: uppercase;
+    font-weight: 300;
+    flex: 1;
+}
+
+.plate__subinfo {
+    margin-top: 0.5rem;
+}

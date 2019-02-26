@@ -53,6 +53,11 @@ export default class Cars {
     })
   }
 
+  static async getMyCar() {
+    let cars = await Cars.getMyCars()
+    return cars[0]
+  }
+
   static getByLicencePlate (licencePlate) {
     const collection = db.collection('cars')
     return new Promise((resolve, reject) => {

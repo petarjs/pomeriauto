@@ -4,6 +4,7 @@ import Settings from '../../services/api/settings'
 import Cars from '../../services/api/cars'
 import { getCurrentUser } from '../../services/auth'
 import Loading from '../../components/Loading';
+import LicencePlateInput from '../../components/LicencePlateInput';
 
 class SetupAccountPage extends React.Component {
     state = {
@@ -79,7 +80,6 @@ class SetupAccountPage extends React.Component {
     }
 
     renderPage () {
-        console.log('render page');
         return (
             <div>
                 <h3 className="page__heading">Samo minut, dva...</h3>
@@ -89,18 +89,17 @@ class SetupAccountPage extends React.Component {
                         Pročitao sam, i slažem se sa <a href="#">Uslovima Korišćenja</a>
                     </label>
 
-                    <label htmlFor="plate">Registarska oznaka:</label>
-                    <div className="plate__wrapper">
-                        <span></span>
-                        <input type="text" name="plate" className="plate-input" onChange={e => this.onLicenceChange(e)} placeholder="BGXXXXYY" />
-                    </div>
+                    <LicencePlateInput
+                        onLicenceChange={e => this.onLicenceChange(e)}
+                        value={this.state.licencePlate}
+                    />
 
                     <label htmlFor="email">Email za obaveštenja:</label>
                     <input type="text" name="email" value={this.state.notificationEmail} onChange={e => this.onEmailChange(e)} />
 
                     <div className="bottom-buttons">
-                        <button onClick={() => this.onNext()}>Sačuvaj podatke</button>
                         <a href="" onClick={() => this.onSkip()}>Preskoči</a>
+                        <button onClick={() => this.onNext()}>Sačuvaj podatke</button>
                     </div>
                 </div>
             </div>

@@ -5,6 +5,8 @@ import Messages from '../../services/api/messages'
 import Requests from '../../services/api/requests'
 import Cars from '../../services/api/cars'
 import RequireAccountSetup from '../../components/RequireAccountSetup';
+import LicencePlate from '../../components/LicencePlate';
+import moment from 'moment'
 
 class Home extends React.Component {
   state = {
@@ -63,8 +65,12 @@ class Home extends React.Component {
     this.props.history.push('/create-car')
   }
 
-  goToAnswerRequest(requestId) {
-    this.props.history.push(`/answer-request/${requestId}`)
+  goToAnswerRequest(request) {
+    if (request.response) {
+      return
+    }
+
+    this.props.history.push(`/answer-request/${request.id}`)
   }
 
   renderNoCarsPage() {
@@ -84,15 +90,30 @@ class Home extends React.Component {
             ? <div>
               {
                 this.state.myRequests.map(request => (
-                  <div key={request.id}>
-                    <div>{new Date(request.created).toLocaleString()}</div>
-                    <div>{request.message}</div>
-                    <div>{request.car.licencePlate}</div>
-                    <div>
+                  <div
+                    className="request"
+                    onClick={() => this.goToAnswerRequest(request)}
+                    key={request.id}
+                  >
+                    <div className="request__col">
+                      <div>{moment(request.created).fromNow()}</div>
+                      <div>{request.message}</div>
+                      <div>
+                        <LicencePlate>{request.car.licencePlate}</LicencePlate>
+                      </div>
+                      {
+                        !!request.response
+                          && <div>
+                            odgovoreno, {request.response}
+                          </div>
+                      }
+                    </div>
+                    <div className="request__col request__col--right">
                       {
                         !request.response
-                          ? <button onClick={() => this.goToAnswerRequest(request.id)}>ODGOVORI</button>
-                          : <span>odgovoreno, {request.response}</span>
+                          && <div className="request__chevron">
+                            <i className="material-icons">chevron_right</i>
+                          </div>
                       }
                     </div>
                   </div>
@@ -108,16 +129,20 @@ class Home extends React.Component {
             : <div>
               {
                 this.state.mySentRequests.map(request => (
-                  <div key={request.id}>
-                    <div>{new Date(request.created).toLocaleString()}</div>
-                    <div>{request.message}</div>
-                    <div>{request.car.licencePlate}</div>
-                    <div>
-                      {
-                        !request.response
-                          ? <span>Ceka se odgovor</span>
-                          : <span>odgovoreno - {request.response}</span>
-                      }
+                  <div className="request" key={request.id}>
+                    <div className="request__col">
+                      <div>{moment(request.created).fromNow()}</div>
+                      <div>{request.message}</div>
+                      <div>
+                        <LicencePlate>{request.car.licencePlate}</LicencePlate>
+                      </div>
+                      <div>
+                        {
+                          !request.response
+                            ? <span>Ceka se odgovor</span>
+                            : <span>odgovoreno - {request.response}</span>
+                        }
+                      </div>
                     </div>
                   </div>
                 ))
@@ -141,15 +166,19 @@ class Home extends React.Component {
 
   render () {
     let user = getCurrentUser()
-    let licencePlate = this.state.myCars.length && this.state.myCars[0].licencePlate
+    let licencePlate = this.state.myCars.length > 0 ? this.state.myCars[0].licencePlate : null
 
     return (
       <React.Fragment>
 
         <div className="content__cover">
           <img src={user.photoURL} width="100" />
-          <span className="content__username">{user.displayName} - {this.state.loginProvider}</span>
-          <span className="content__licence-plate">{licencePlate}</span>
+          <span className="content__username">{user.displayName}</span>
+
+          {
+            !!licencePlate
+              && <LicencePlate>{licencePlate}</LicencePlate>
+          }
         </div>
 
         <div className="tabs requests-tabs">

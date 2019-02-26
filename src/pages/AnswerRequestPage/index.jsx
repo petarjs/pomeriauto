@@ -5,6 +5,7 @@ import { getCurrentUser } from '../../services/auth'
 import Responses from '../../services/api/responses'
 import Requests from '../../services/api/requests'
 import Cars from '../../services/api/cars'
+import moment from 'moment';
 
 class AnswerRequestPage extends React.Component {
   state = {
@@ -15,7 +16,7 @@ class AnswerRequestPage extends React.Component {
 
   async componentDidMount () {
     let responses = await Responses.getAll()
-    
+
     let requestId = this.props.match.params.requestId
     let request = await Requests.getById(requestId)
 
@@ -28,12 +29,11 @@ class AnswerRequestPage extends React.Component {
     })
   }
 
-  async onAnswewrRequest () {
+  async onAnswerRequest (response) {
     let requestId = this.props.match.params.requestId
-    let user = getCurrentUser()
-    
+
     await Requests.updateRequest(requestId, {
-      response: this.state.response,
+      response: response.text,
       status: 'answered',
     })
 
@@ -47,18 +47,24 @@ class AnswerRequestPage extends React.Component {
       this.state.request &&
         <div>
           <div>Vreme: {new Date(this.state.request.created).toLocaleString()}</div>
+          <div>{moment(this.state.request.created).fromNow()}</div>
 
-          <select onChange={e => this.onResponseChosen(e)}>
-            <option value="">Odgovori</option>
+          <div>
+            Odgovori
+          </div>
+
+          <div>
             {
               this.state.responses.map(
-                response => 
-                  <option key={response.id} value={response.text}>{response.text}</option>
+                response =>
+                  <button
+                    key={response.id}
+                    className="full-width button-outline"
+                    onClick={() => this.onAnswerRequest(response)}
+                  >{response.text}</button>
               )
             }
-          </select>
-
-          <button onClick={() => this.onAnswewrRequest()}>ODGOVORi</button>
+          </div>
         </div>
     )
   }
