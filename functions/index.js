@@ -1,6 +1,7 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const { sendEmail } = require('./mail')
+const moment = require('moment')
 
 admin.initializeApp();
 
@@ -24,6 +25,10 @@ exports.onNotifyMoveRequest = functions
 
                     sendEmail(email, 'PAZNJA - POMERITE AUTO', `
                         Nekome ste blokirali auto i treba da ga pomerite asap.
+                        <br>
+                        Pre ${moment(request.created).fromNow()}.
+                        <br>
+                        On vam je porucio: "${request.message}".
                         <br>
                         <a href="https://pomeriauto.com">ODGOVORI</a>
                     `)
