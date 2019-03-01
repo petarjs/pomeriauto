@@ -21,12 +21,32 @@ exports.onNotifyMoveRequest = functions
                 .then(snap => {
                     let data = snap.data()
 
+                    if (data.deviceId) {
+                        admin.messaging().send({
+                            notification: {
+                                title: 'PAZNJA - POMERITE AUTO!',
+                                body: `Nekome ste blokirali auto - ${request.message}`
+                            },
+                            apns: {
+                                headers: {
+                                    'apns-priority': '10',
+                                },
+                                payload: {
+                                    aps: {
+                                        sound: 'default',
+                                    }
+                                },
+                            },
+                            token: data.deviceId
+                        })
+                    }
+
                     let email = data.notificationEmail
 
                     sendEmail(email, 'PAZNJA - POMERITE AUTO', `
                         Nekome ste blokirali auto i treba da ga pomerite asap.
                         <br>
-                        Pre ${moment(request.created).fromNow()}.
+                        s${moment(request.created).format('DD.MM.YYYY HH:mm')}.
                         <br>
                         On vam je porucio: "${request.message}".
                         <br>
