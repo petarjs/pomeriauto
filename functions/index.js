@@ -25,7 +25,8 @@ exports.onNotifyMoveRequest = functions
                         admin.messaging().send({
                             notification: {
                                 title: 'PAZNJA - POMERITE AUTO!',
-                                body: `Nekome ste blokirali auto - ${request.message}`
+                                body: `Nekome ste blokirali auto - ${request.message}`,
+                                click_action: 'RESPOND'
                             },
                             apns: {
                                 headers: {
