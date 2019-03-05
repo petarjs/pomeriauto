@@ -1,6 +1,5 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "PomeriAuto",
   "icons": [
     {
       "src": "favicon.ico",
@@ -10,6 +9,7 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#CE3300",
+  "background_color": "#ffffff",
+  "gcm_sender_id": "103953800507"
 }

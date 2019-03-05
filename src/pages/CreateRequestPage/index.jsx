@@ -10,7 +10,7 @@ import LicencePlateInput from '../../components/LicencePlateInput';
 class CreateRequestPage extends React.Component {
   state = {
     messages: [],
-    message: null,
+    message: 'Molim te pomeri auto',
     licencePlate: ''
   }
 
@@ -65,16 +65,6 @@ class CreateRequestPage extends React.Component {
           value={this.state.licencePlate}
         />
 
-        <label>Poruka vlasniku:</label>
-        <select className="msg__type" onChange={e => this.onMessageChosen(e)}>
-          <option value="">Izaberi poruku</option>
-          {
-            this.state.messages.map(
-              message =>
-                <option key={message.id} value={message.text}>{message.text}</option>
-            )
-          }
-        </select>
         <div className="bottom-buttons">
             <a href="#">Odustani</a>
             <button onClick={() => this.onMove()}>POMERI</button>
