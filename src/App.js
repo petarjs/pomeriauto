@@ -8,6 +8,7 @@ import Login from './pages/Login'
 import PrivateRoute from './components/PrivateRoute'
 import PublicRoute from './components/PublicRoute'
 import PrivateLayout from './pages/PrivateLayout'
+import routes from './routes';
 
 require('moment/locale/sr')
 
@@ -20,8 +21,8 @@ class App extends Component {
     return (
       <Router>
         <React.Fragment>
-          <PrivateRoute path="/" component={PrivateLayout} />
-          <PublicRoute path="/login" exact component={Login} />
+          <PrivateRoute path={routes.HOME_PAGE} component={PrivateLayout} />
+          <PublicRoute path={routes.LOGIN_PAGE} exact component={Login} />
         </React.Fragment>
       </Router>
     );

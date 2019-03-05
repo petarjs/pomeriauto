@@ -6,8 +6,10 @@ import Responses from '../../services/api/responses'
 import Requests from '../../services/api/requests'
 import Cars from '../../services/api/cars'
 import moment from 'moment';
+import LicencePlate from '../../components/LicencePlate';
+import routes from '../../routes';
 
-class AnswerRequestPage extends React.Component {
+class RequestPage extends React.Component {
   state = {
     responses: [],
     response: null,
@@ -37,20 +39,45 @@ class AnswerRequestPage extends React.Component {
       status: 'answered',
     })
 
-    this.props.history.push('/')
+    this.props.history.push(routes.HOME_PAGE)
   }
 
   render () {
     let user = getCurrentUser()
 
+    console.log(this.state.request);
+
     return (
       this.state.request &&
         <div>
+          <div>Moj odgovor</div>
+
+          <div>
+            {
+              !!this.state.request.requester && (
+                <LicencePlate>{this.state.request.requester.car.licencePlate}</LicencePlate>
+              )
+            }
+
+            {
+              !!this.state.request.requester && (
+                <span>&rarr;</span>
+              )
+            }
+            <LicencePlate>{this.state.request.car.licencePlate}</LicencePlate>
+          </div>
+
+          {
+            !!this.state.request.requester && (
+              <img src={this.state.requester.settings.imageUrl} alt=""/>
+            )
+          }
+
           <div>Vreme: {new Date(this.state.request.created).toLocaleString()}</div>
           <div>{moment(this.state.request.created).fromNow()}</div>
 
           <div>
-            Odgovori
+            Dolazim za
           </div>
 
           <div>
@@ -65,9 +92,13 @@ class AnswerRequestPage extends React.Component {
               )
             }
           </div>
+
+          <div className="footer-actions">
+            <button className="button-clear">Otkaži</button>
+          </div>
         </div>
     )
   }
 }
 
-export default withRouter(AnswerRequestPage)
+export default withRouter(RequestPage)

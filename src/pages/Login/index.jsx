@@ -4,6 +4,7 @@ import logo from '../../img/logo-space.png'
 import { withRouter } from 'react-router-dom'
 import { ReactComponent as FacebookIcon } from './facebook.svg';
 import { ReactComponent as GoogleIcon } from './google.svg';
+import routes from '../../routes';
 
 // {
 //   signInFlow: ("matchMedia" in window && window.matchMedia('(display-mode: standalone)').matches) ? "popup" : "redirect"
@@ -17,11 +18,10 @@ class Login extends React.Component {
         .auth()
         .signInWithPopup(googleAuthProvider)
         .then(result => {
-          let token = result.credential.accessToken;
           let user = result.user;
 
           if (user) {
-            this.props.history.push('/setup-account')
+            this.props.history.push(routes.SETUP_ACCOUNT_PAGE)
           }
 
         })
@@ -42,7 +42,7 @@ class Login extends React.Component {
           let user = result.user;
 
           if (user) {
-            this.props.history.push('/setup-account')
+            this.props.history.push(routes.SETUP_ACCOUNT_PAGE)
           }
 
         })

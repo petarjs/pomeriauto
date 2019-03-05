@@ -6,6 +6,7 @@ import CustomUploadButton from 'react-firebase-file-uploader/lib/CustomUploadBut
 import firebase from '../../services/firebase'
 import Cars from '../../services/api/cars';
 import Loading from '../../components/Loading';
+import routes from '../../routes';
 
 class SettingsPage extends React.Component {
     state = {
@@ -33,12 +34,12 @@ class SettingsPage extends React.Component {
             licencePlate: this.state.licencePlate.toUpperCase()
         })
 
-        this.props.history.push('/')
+        this.props.history.push(routes.HOME_PAGE)
     }
 
     async logout () {
         await logout()
-        this.props.history.push('/login')
+        this.props.history.push(routes.LOGIN_PAGE)
     }
 
     handleUploadStart = () => this.setState({ loading: true, progress: 0 });

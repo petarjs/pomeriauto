@@ -6,6 +6,8 @@ import Messages from '../../services/api/messages'
 import Requests from '../../services/api/requests'
 import Cars from '../../services/api/cars'
 import LicencePlateInput from '../../components/LicencePlateInput';
+import { getErrorMessage } from '../../services/error-messages';
+import routes from '../../routes';
 
 class CreateRequestPage extends React.Component {
   state = {
@@ -41,17 +43,34 @@ class CreateRequestPage extends React.Component {
       return
     }
 
+    let myCar = await Cars.getMyCar()
+
     // let existingRequest = await Requests.getByLicencePlate(this.state.licencePlate.toUpperCase())
     // console.log(existingRequest);
 
-    let newRequest = await Requests.createRequest({
-      car,
-      requesterId: user.uid,
-      message: this.state.message,
-      status: 'pending',
-    })
+    let newRequest
 
-    this.props.history.push(`/waiting-request/${newRequest.id}`)
+    try {
+      newRequest = await Requests.createRequest({
+        car,
+        requesterId: user.uid,
+        requester: {
+          settings: {
+            imageUrl: user.photoURL
+          },
+          car: {
+            licencePlate: myCar.licencePlate
+          }
+        },
+        message: this.state.message,
+        status: 'pending',
+      })
+
+      let route = routes.WAITING_REQUEST_PAGE.replace(':requestId', newRequest.id)
+      this.props.history.push(route)
+    } catch(e) {
+      alert(getErrorMessage(e))
+    }
   }
 
   render () {
@@ -61,6 +80,7 @@ class CreateRequestPage extends React.Component {
       <div className="main__content">
 
         <LicencePlateInput
+          hideLabel
           onLicenceChange={e => this.onLicenceChange(e)}
           value={this.state.licencePlate}
         />

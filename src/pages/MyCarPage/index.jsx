@@ -7,6 +7,7 @@ import Loading from '../../components/Loading'
 
 import './index.css'
 import LicencePlateInput from '../../components/LicencePlateInput';
+import routes from '../../routes';
 
 class MyCarPage extends React.Component {
     state = {
@@ -35,14 +36,11 @@ class MyCarPage extends React.Component {
         await Cars.updateMyCar(id, {
             licencePlate: this.state.licencePlate.toUpperCase()
         })
-
-        this.props.history.push('/my-cars')
     }
 
     async onDelete () {
         let id = this.props.match.params.id
         await Cars.deleteMyCar(id)
-        this.props.history.push('/my-cars')
     }
 
     handleUploadStart = () => this.setState({ loading: true, progress: 0 });

@@ -2,6 +2,7 @@ import React from 'react'
 import { Redirect } from 'react-router-dom'
 import Settings from '../../services/api/settings'
 import Loading from '../Loading';
+import routes from '../../routes';
 
 const requireAccountSetup = (WrappedComponent) =>
   class RequireAccountSetup extends React.Component {
@@ -20,7 +21,7 @@ const requireAccountSetup = (WrappedComponent) =>
           : this.state.settings
             ? <WrappedComponent {...this.props} />
             : <Redirect to={{
-                pathname: '/setup-account'
+                pathname: routes.SETUP_ACCOUNT_PAGE
               }} />
       )
     }

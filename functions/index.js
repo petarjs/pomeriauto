@@ -133,6 +133,7 @@ exports.onNotifyMoveResponse = functions
                                     title: 'Odgovor primljen',
                                     body: `${request.response}`,
                                 },
+                                token: data.webDeviceId,
                                 webpush: {
                                     headers: {
                                         Urgency: 'high'

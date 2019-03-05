@@ -5,6 +5,7 @@ import Cars from '../../services/api/cars'
 import { getCurrentUser } from '../../services/auth'
 import Loading from '../../components/Loading';
 import LicencePlateInput from '../../components/LicencePlateInput';
+import routes from '../../routes';
 
 class SetupAccountPage extends React.Component {
     state = {
@@ -59,7 +60,7 @@ class SetupAccountPage extends React.Component {
 
             this.setState({ loading: false })
 
-            this.props.history.push('/')
+            this.props.history.push(routes.HOME_PAGE)
         } catch(ex) {
             this.setState({ loading: false })
             alert(ex)
@@ -76,7 +77,7 @@ class SetupAccountPage extends React.Component {
             termsAccepted: this.state.termsAccepted,
         })
 
-        this.props.history.push('/')
+        this.props.history.push(routes.HOME_PAGE)
     }
 
     renderPage () {
@@ -115,7 +116,7 @@ class SetupAccountPage extends React.Component {
             <React.Fragment>
                 {
                     (this.state.settings && this.state.settings.termsAccepted)
-                        ? <Redirect to={{ pathname: '/' }} />
+                        ? <Redirect to={{ pathname: routes.HOME_PAGE }} />
                         : this.renderPage()
                 }
             </React.Fragment>

@@ -178,6 +178,13 @@ button.button-outline,
   color: var(--primary);
 }
 
+.button.button-clear,
+button.button-clear {
+  background: transparent;
+  border: 0;
+  color: var(--primary);
+}
+
 button.full-width,
 .button.full-width {
   display: block;

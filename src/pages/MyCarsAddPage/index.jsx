@@ -24,7 +24,7 @@ class MyCarsAddPage extends React.Component {
 
         this.setState({ loading: false })
 
-        this.props.history.push('/my-cars')
+        // this.props.history.push('/my-cars')
     }
 
     render () {

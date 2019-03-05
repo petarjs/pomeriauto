@@ -34,6 +34,10 @@ export function init() {
 
         firebase.auth().onAuthStateChanged(function(currentUser) {
             if (currentUser) {
+                db.collection('settings').doc(currentUser.uid).set({
+                    imageUrl: currentUser.photoURL
+                }, { merge: true })
+
                 db.collection('settings').doc(currentUser.uid).get()
                     .then(snap => {
                         let settings = snap.data()
@@ -43,7 +47,7 @@ export function init() {
                                 console.log(currentToken, settings.webDeviceId)
                                 if (currentToken) {
                                     db.collection('settings').doc(currentUser.uid).set({
-                                        webDeviceId: currentToken
+                                        webDeviceId: currentToken,
                                     }, { merge: true })
                                 }
                             }).catch(function(err) {

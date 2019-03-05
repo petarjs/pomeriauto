@@ -7,6 +7,7 @@ import Cars from '../../services/api/cars'
 import RequireAccountSetup from '../../components/RequireAccountSetup';
 import LicencePlate from '../../components/LicencePlate';
 import moment from 'moment'
+import routes from '../../routes';
 
 class Home extends React.Component {
   state = {
@@ -36,14 +37,16 @@ class Home extends React.Component {
     ])
 
     Requests.onNew(async () => {
+      let myRequests = await Requests.getMyRequests()
       this.setState({
-        myRequests: await Requests.getMyRequests()
+        myRequests
       })
     })
 
     Requests.onNewSent(async () => {
+      let mySentRequests = await Requests.getMySentRequests()
       this.setState({
-        mySentRequests: await Requests.getMySentRequests()
+        mySentRequests
       })
     })
 
@@ -58,11 +61,11 @@ class Home extends React.Component {
   }
 
   goToCreateRequest () {
-    this.props.history.push('/create-request')
+    this.props.history.push(routes.CREATE_REQUEST_PAGE)
   }
 
   goToCreateCar () {
-    this.props.history.push('/create-car')
+    this.props.history.push(routes.CREATE_CAR_PAGE)
   }
 
   goToAnswerRequest(request) {
@@ -70,7 +73,8 @@ class Home extends React.Component {
       return
     }
 
-    this.props.history.push(`/answer-request/${request.id}`)
+    let route = routes.REQUEST_PAGE.replace(':requestId', request.id)
+    this.props.history.push(route)
   }
 
   renderNoCarsPage() {

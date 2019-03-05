@@ -1,6 +1,7 @@
 import React from 'react'
 import { Route, Redirect } from 'react-router-dom'
 import { isLoggedIn } from '../../services/auth'
+import routes from '../../routes';
 
 class PrivateRoute extends React.Component {
   render () {
@@ -11,7 +12,7 @@ class PrivateRoute extends React.Component {
         isLoggedIn()
           ? <Component {...props} />
           : <Redirect to={{
-              pathname: '/login'
+              pathname: routes.LOGIN_PAGE
             }} />
       )} />
     )

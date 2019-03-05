@@ -6,6 +6,7 @@ import Messages from '../../services/api/messages'
 import Requests from '../../services/api/requests'
 import Cars from '../../services/api/cars'
 import LicencePlateInput from '../../components/LicencePlateInput';
+import routes from '../../routes';
 
 class CreateCarPage extends React.Component {
   state = {
@@ -38,7 +39,7 @@ class CreateCarPage extends React.Component {
         ownerId: user.uid
       })
 
-      this.props.history.push('/')
+      this.props.history.push(routes.HOME_PAGE)
     } catch (ex) {
       alert(ex)
     }

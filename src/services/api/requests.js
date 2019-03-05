@@ -1,5 +1,6 @@
 import firebase, { db } from '../firebase'
 import { getCurrentUser } from '../auth'
+import Cars from './cars'
 
 export default class Requests {
   static getMyRequests () {
@@ -155,7 +156,13 @@ export default class Requests {
       });
   }
 
-  static createRequest(data) {
+  static async createRequest(data) {
+    let myCar = await Cars.getMyCar()
+
+    if (data.licencePlate === myCar.licencePlate) {
+      throw Error('cannot-move-own-car')
+    }
+
     data.created = new Date().valueOf()
 
     const collection = db.collection('requests')
