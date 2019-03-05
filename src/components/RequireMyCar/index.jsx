@@ -1,24 +1,24 @@
 import React from 'react'
 import { Redirect } from 'react-router-dom'
-import Settings from '../../services/api/settings'
+import Cars from '../../services/api/cars'
 import Loading from '../Loading';
 import routes from '../../routes';
 
-const requireAccountSetup = (WrappedComponent) =>
-  class RequireAccountSetup extends React.Component {
-    state = { settings: null, loading: true }
+const requireMyCar = (WrappedComponent) =>
+  class RequireMyCar extends React.Component {
+    state = { myCar: null, loading: true }
 
     async componentDidMount () {
-      let settings = await Settings.getMySettings()
+      let myCar = await Cars.getMyCar()
 
-      this.setState({ loading: false, settings })
+      this.setState({ loading: false, myCar })
     }
 
     render () {
       return (
         this.state.loading
           ? <div></div>
-          : this.state.settings
+          : this.state.myCar
             ? <WrappedComponent {...this.props} />
             : <Redirect to={{
                 pathname: routes.SETUP_ACCOUNT_PAGE
@@ -28,4 +28,4 @@ const requireAccountSetup = (WrappedComponent) =>
   }
 
 
-export default requireAccountSetup
+export default requireMyCar

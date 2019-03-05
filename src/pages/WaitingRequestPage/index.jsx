@@ -5,6 +5,9 @@ import { getCurrentUser } from '../../services/auth'
 import Responses from '../../services/api/responses'
 import Requests from '../../services/api/requests'
 import Cars from '../../services/api/cars'
+import LicencePlate from '../../components/LicencePlate'
+import moment from 'moment'
+import routes from '../../routes';
 
 class waitingRequestPage extends React.Component {
   state = {
@@ -23,6 +26,10 @@ class waitingRequestPage extends React.Component {
       .onRequestUpdated(requestId, request => this.setState({ request }))
   }
 
+  goToHome() {
+    this.props.history.push(routes.HOME_PAGE)
+  }
+
   render () {
     let user = getCurrentUser()
 
@@ -30,14 +37,69 @@ class waitingRequestPage extends React.Component {
 
     return (
       this.state.request &&
-        <div>
-          <div>Vreme: {new Date(this.state.request.created).toLocaleString()}</div>
+      <div className="request-page">
+        <div className="content__cover content__cover--request-page">
+          <div className="content__cover-inner content__cover-inner--padding">
+            <span className="content__title">Odgovor vlasnika</span>
 
-          <div>{this.state.request.status}</div>
-          <div>{this.state.request.response}</div>
+            <div className="content__cover-inner request-details">
+              {
+                !!this.state.request.requester && (
+                  <div className="car-info">
+                    {
+                      !!this.state.request.requester && (
+                        <img className="profile-image" src={this.state.request.requester.settings.imageUrl} alt=""/>
+                      )
+                    }
+                    <LicencePlate>{this.state.request.requester.car.licencePlate}</LicencePlate>
+                  </div>
+                )
+              }
 
-          {/* <button onClick={() => this.onAnswewrRequest()}>ODGOVORi</button> */}
+              {
+                !!this.state.request.requester && (
+                  <i className="material-icons">arrow_right_alt</i>
+                )
+              }
+
+              <div className="car-info">
+                {
+                  this.state.request.owner && (
+                    <img className="profile-image" src={this.state.request.owner.settings.imageUrl} alt=""/>
+                  )
+                }
+                <LicencePlate>{this.state.request.car.licencePlate}</LicencePlate>
+              </div>
+            </div>
+          </div>
         </div>
+
+        <div className="request-body">
+
+          {/* <div>Vreme: {new Date(this.state.request.created).toLocaleString()}</div> */}
+          <div>Zahtev poslan {moment(this.state.request.created).fromNow()}</div>
+
+          <div className="w-100 ta-c p-1">
+            {
+              !this.state.request.response
+                ? <span>Vlasnik još uvek nije odgovorio...</span>
+                : <span>{this.state.request.response}</span>
+            }
+          </div>
+
+          {
+            !!this.state.request.car.imageUrl && (
+              <div className="car-image">
+                <img src={this.state.request.car.imageUrl} alt=""/>
+              </div>
+            )
+          }
+        </div>
+
+        <div className="footer-actions">
+          <button onClick={() => this.goToHome()} className="button-clear">Nazad</button>
+        </div>
+      </div>
     )
   }
 }

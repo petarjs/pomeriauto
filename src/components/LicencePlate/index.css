@@ -1,15 +1,25 @@
 .plate__wrapper {
-    border-radius: 4px;
+    border-radius: 0;
     display: inline-block;
     width: auto;
     background: white;
     margin-top: 0.25rem;
     display: flex;
+    overflow: hidden;
 }
+
+.plate__wrapper.plate-hidden > span {
+    display: none;
+}
+
+.plate__wrapper.plate-hidden .plate {
+margin: 0;
+}
+
 .plate__wrapper > span {
     display: inline-block;
     min-width: 1.6rem;
-    height: 2.85rem;
+    height: 2.2rem;
     vertical-align: top;
     background: #36307b;
     position: relative;
@@ -31,10 +41,13 @@
     margin: 0 0.5rem;
     border: 0;
     padding: 0;
-    font-size: 2.3rem;
+    font-size: 1.7rem;
     text-transform: uppercase;
     font-weight: 300;
     flex: 1;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 .plate__subinfo {

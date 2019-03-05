@@ -54,9 +54,9 @@ class Login extends React.Component {
 
   render () {
       return (
-        <div className="columns is-gapless is-fullheight">
+        <div className="login-page">
           <img className="login-logo" src={logo} alt="logo" />
-          <div className="column">
+          <div className="login-buttons-container">
             <button className="button login-button login-button--google is-success" onClick={() => this.loginGoogle()}>
               <GoogleIcon />
               <span className="login-button-text">Google</span>

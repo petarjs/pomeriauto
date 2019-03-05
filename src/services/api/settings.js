@@ -11,9 +11,17 @@ export default class Settings {
     })
   }
 
-  static saveMySettings(data) {  
+  static async getByUserId (id) {
+    const collection = db.collection('settings')
+
+    let doc = await collection.doc(id).get()
+    return doc.data()
+  }
+
+  static saveMySettings(data) {
     const collection = db.collection('settings')
 
     return collection.doc(getCurrentUser().uid).set(data, { merge: true })
   }
+
 }

@@ -1,15 +1,27 @@
 :root {
   --primary: #CE3300;
   --gray-light: #f0f0f0;
+  --gray: grey;
 }
 
 * {
   box-sizing: border-box;
 }
 
+html {
+  overflow: hidden;
+}
+
 .material-icons {
   color: white;
 }
+
+.w-100 {
+  width: 100%;
+}
+
+.ta-c { text-align: center; }
+.p-1 { padding: 1rem; }
 
 .App {
   text-align: center;
@@ -38,10 +50,10 @@
 /* Styles */
 #root {
   max-width: 480px;
-  display: flex;
+  /* display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: center; */
   background: #fefefe;
   min-height: 100%;
 }
@@ -89,7 +101,7 @@
   font-size: 2rem;
   padding: 3rem 2rem 2rem;
   background: #eee;
-  border-bottom: 1px solid #ccc;
+
   color: #333;
 }
 
@@ -99,22 +111,49 @@
 
 .content__cover {
   background: #eee;
-  border-bottom: 1px solid #aaa;
+
+}
+
+.content__cover-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.content__cover-inner.content__cover-inner--padding {
+  padding-top: 1rem;
+}
+
+.content__cover-inner.content__cover-inner--home {
+  margin-bottom: 0;
+  position: relative;
+  top: 1rem;
+  justify-content: space-between;
+  padding: 0 1rem;
+  padding-top: 2rem;
+}
+
+.content__cover--request-page > .content__cover-inner {
+  flex-direction: column;
 }
 
 .content__username {
-  margin-right: 1rem;
+  /* margin: 0 3rem 0 0.5rem; */
+  margin-left: 0.5rem;
   display: inline-block;
-  margin-bottom: 1rem;
 }
 
-.content__cover img {
+.content__cover img,
+.profile-image {
   border-radius: 50%;
-  margin: 2rem 0.5rem -3rem 2rem;
+  margin: 0;
+  width: 70px;
 }
 
 .requests__wrap {
   background:#fff;
+  overflow: auto;
+  flex: 1;
 }
 
 .request {
@@ -133,7 +172,7 @@
 }
 
 .request__chevron .material-icons {
-  color: var(--primary);
+  color: var(--gray);
   font-size: 3rem;
 }
 
@@ -146,6 +185,21 @@
   padding: 0;
   flex: none;
   display: flex;
+}
+
+.no-msgs {
+  text-align: center;
+  padding: 2rem;
+}
+
+.no-msgs .material-icons {
+  font-size: 6rem;
+}
+
+.no-msgs h3 {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 400;
 }
 
 .no-msgs > * {
@@ -203,7 +257,7 @@ button.small-button,
 }
 
 .login-button {
-  width: 80%;
+  width: 100%;
   font-size: 1.5rem;
   margin: 0 10%;
   position: relative;
@@ -265,7 +319,7 @@ input[type="text"]:focus {
 }
 
 input[name="email"] {
-  width: 80%;
+  width: 100%;
 }
 
 .msg__type {
@@ -282,23 +336,16 @@ input[name="email"] {
 }
 
 .bottom-buttons {
-  margin-top: 4rem;
+  /* margin-top: 4rem; */
   border-top: 1px solid #ccc;
-  padding-top: 1rem;
-  padding-left: 2rem;
-  padding-right: 2rem;
+  padding: 1rem;
   display: flex;
   align-items: center;
-  position: fixed;
+  /* position: fixed;
   bottom: 30px;
   left: 0;
-  right: 0;
+  right: 0; */
   justify-content: space-between;
-}
-
-.bottom-buttons a {
-  margin-top: 1rem;
-  margin-right: 2rem;
 }
 
 *:focus {
@@ -317,7 +364,7 @@ input[name="email"] {
 }
 
 .tabs.requests-tabs {
-  margin-top: 2rem;
+  margin: 2.5rem 1rem 0.5rem;
 }
 
 .tabs {
@@ -330,11 +377,18 @@ input[name="email"] {
   flex: 1;
   color: var(--primary);
   background: white;
-  border-top: 1px solid var(--primary);
-  border-bottom: 1px solid var(--primary);
-  padding: 1rem 1.5rem;
+  border: 1px solid var(--primary);
+  padding: 0.5rem 1.5rem;
   font-size: 1.2rem;
   text-align: center;
+}
+
+.tab:first-child {
+  border-radius: 4px 0 0 4px;
+}
+
+.tab:last-child {
+  border-radius: 0 4px 4px 0;
 }
 
 .tab--active {
@@ -343,10 +397,22 @@ input[name="email"] {
 }
 
 .page-header {
+  min-height: 110px;
   background: var(--gray-light);
   font-size: 26px;
   font-weight: 300;
-  padding: 2.5rem 1.5rem 1.5rem;
+  padding: 1.5rem;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.page-header.page-header--body {
+  background: transparent;
+  padding: 1rem 1.5rem 0;
+  width: 100%;
+  min-height: 0;
 }
 
 .page-subheader {
@@ -390,4 +456,111 @@ input[name="email"] {
 
 .settings-actions label {
   margin-top: 0;
+}
+
+.content__cover .content__title {
+  font-size: 2rem;
+  font-weight: 300;
+}
+
+.request-details {
+  margin-top: 1rem;
+  justify-content: space-around;
+  width: 100%;
+}
+
+.request-details .material-icons {
+  color: black;
+  font-size: 2.4rem;
+}
+
+.request-body {
+  display: flex;
+  flex: 1;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+  padding-top: 2rem;
+  width: 100%;
+}
+
+.footer-actions {
+  width: 100%;
+  z-index: 1;
+  background: white;
+}
+
+#root > div {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh;
+  overflow: auto;
+}
+
+.new-request-page,
+.setup-account-page,
+.request-page {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.new-request-page .main__content {
+  flex: 1;
+  padding-top: 2rem;
+}
+
+.setup-account-page .main__content {
+  flex: 1;
+}
+
+.settings-content {
+  flex: 1;
+  overflow: auto;
+}
+
+.login-buttons-container {
+  padding: 1rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.login-page {
+  justify-content: space-between;
+}
+
+.no-car-wrap {
+  padding: 0 1rem;
+  text-align: center;
+}
+
+.setup-account-page {
+  flex: 1;
+}
+
+.setup-account-content {
+  flex: 1;
+  overflow: auto;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.car-info {
+  text-align: center;
+}
+
+.car-info * {
+  text-align: initial;
+}
+
+.car-image img {
+  width: 100%;
 }

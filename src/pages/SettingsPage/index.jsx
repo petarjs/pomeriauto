@@ -7,6 +7,7 @@ import firebase from '../../services/firebase'
 import Cars from '../../services/api/cars';
 import Loading from '../../components/Loading';
 import routes from '../../routes';
+import requireMyCar from '../../components/RequireMyCar';
 
 class SettingsPage extends React.Component {
     state = {
@@ -20,11 +21,16 @@ class SettingsPage extends React.Component {
     async componentDidMount () {
         let car = await Cars.getMyCar()
 
-        this.setState({
-            car,
-            licencePlate: car.licencePlate,
+        let newState = {
             loading: false
-        })
+        }
+
+        if (car) {
+            newState.car = car
+            newState.licencePlate = car.licencePlate
+        }
+
+        this.setState(newState)
     }
 
     async onSave () {
@@ -83,51 +89,56 @@ class SettingsPage extends React.Component {
                 : <React.Fragment>
                     <div className="page-header">
                         <div className="title">Podešavanja</div>
+                        <button className="button-outline" onClick={() => this.logout()}>Logout</button>
                     </div>
-                    <div className="page-subheader">
-                        <div className="subtitle">
-                            <i className="material-icons">info</i>
-                            Promenite aktivno vozilo za koje želite da primate notifikacije.
+
+                    <div className="settings-content">
+
+                        <div className="page-subheader">
+                            <div className="subtitle">
+                                <i className="material-icons">info</i>
+                                Promenite aktivno vozilo za koje želite da primate notifikacije.
+                            </div>
+                        </div>
+
+                        <div className="settings__licence-plate">
+                            <LicencePlateInput
+                                value={this.state.licencePlate}
+                                onLicenceChange={e => this.onLicenceChange(e)}
+                            />
+                        </div>
+
+                        <div>
+                            {this.state.car.imageUrl && <img className="car__image" alt="Car" src={this.state.car.imageUrl} />}
+
+                            <div className="settings-actions">
+                                <CustomUploadButton
+                                    accept="image/*"
+                                    name="car"
+                                    randomizeFilename
+                                    storageRef={firebase.storage().ref('cars')}
+                                    onUploadStart={this.handleUploadStart}
+                                    onUploadError={this.handleUploadError}
+                                    onUploadSuccess={this.handleUploadSuccess}
+                                    onProgress={this.handleProgress}
+                                    className="button button-outline settings-action"
+                                >
+                                    Izaberite sliku
+                                </CustomUploadButton>
+
+                                {/* <button className="button button-outline settings-action">Saobrcajna</button> */}
+                            </div>
                         </div>
                     </div>
 
-                    <div className="settings__licence-plate">
-                        <LicencePlateInput
-                            value={this.state.licencePlate}
-                            onLicenceChange={e => this.onLicenceChange(e)}
-                        />
-                    </div>
 
-                    <div>
-                        {this.state.car.imageUrl && <img className="car__image" alt="Car" src={this.state.car.imageUrl} />}
-
-                        <div className="settings-actions">
-                            <CustomUploadButton
-                                accept="image/*"
-                                name="car"
-                                randomizeFilename
-                                storageRef={firebase.storage().ref('cars')}
-                                onUploadStart={this.handleUploadStart}
-                                onUploadError={this.handleUploadError}
-                                onUploadSuccess={this.handleUploadSuccess}
-                                onProgress={this.handleProgress}
-                                className="button button-outline settings-action"
-                            >
-                                Izaberite sliku
-                            </CustomUploadButton>
-
-                            {/* <button className="button button-outline settings-action">Saobrcajna</button> */}
-                        </div>
-                    </div>
-
-
-                    <div>
-                        <button className="full-width" onClick={() => this.logout()}>Logout</button>
-                        <button className="full-width" onClick={() => this.onSave()}>Sačuvaj</button>
+                    <div className="bottom-buttons">
+                        <Link className="button button-clear" to={routes.HOME_PAGE}>Odustani</Link>
+                        <button onClick={() => this.onSave()}>Sačuvaj</button>
                     </div>
                 </React.Fragment>
         )
     }
 }
 
-export default SettingsPage
+export default requireMyCar(SettingsPage)

@@ -12,8 +12,8 @@ class SetupAccountPage extends React.Component {
         loading: true,
         settings: null,
         termsAccepted: null,
-        notificationEmail: null,
-        licencePlate: null
+        notificationEmail: '',
+        licencePlate: ''
     }
 
     async componentWillMount () {
@@ -41,7 +41,12 @@ class SetupAccountPage extends React.Component {
 
     async onNext() {
         if (!this.state.termsAccepted) {
-            alert('Prihvati uslove')
+            alert('Prihvatite uslove')
+            return
+        }
+
+        if(!this.state.licencePlate) {
+            alert('Ubacite registraciju')
             return
         }
 
@@ -73,6 +78,11 @@ class SetupAccountPage extends React.Component {
             return
         }
 
+        if(!this.state.licencePlate) {
+            alert('Ubacite registraciju')
+            return
+        }
+
         await Settings.saveMySettings({
             termsAccepted: this.state.termsAccepted,
         })
@@ -82,9 +92,11 @@ class SetupAccountPage extends React.Component {
 
     renderPage () {
         return (
-            <div>
-                <h3 className="page__heading">Samo minut, dva...</h3>
-                <div className="main__content">
+            <div className="setup-account-page">
+                <h3 className="page__heading page-header">
+                    <div className="title">Samo minut, dva...</div>
+                </h3>
+                <div className="main__content setup-account-content">
                     <label>
                         <input type="checkbox" onChange={e => this.onTermsChange(e)} />
                         Pročitao sam, i slažem se sa <a href="#">Uslovima Korišćenja</a>
@@ -98,10 +110,10 @@ class SetupAccountPage extends React.Component {
                     <label htmlFor="email">Email za obaveštenja:</label>
                     <input type="text" name="email" value={this.state.notificationEmail} onChange={e => this.onEmailChange(e)} />
 
-                    <div className="bottom-buttons">
-                        <a href="" onClick={() => this.onSkip()}>Preskoči</a>
-                        <button onClick={() => this.onNext()}>Sačuvaj podatke</button>
-                    </div>
+                </div>
+                <div className="footer-actions">
+                    {/* <a href="" onClick={() => this.onSkip()}>Preskoči</a> */}
+                    <button className="full-width" onClick={() => this.onNext()}>Sačuvaj podatke</button>
                 </div>
             </div>
         )

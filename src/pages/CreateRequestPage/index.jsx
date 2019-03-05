@@ -8,6 +8,7 @@ import Cars from '../../services/api/cars'
 import LicencePlateInput from '../../components/LicencePlateInput';
 import { getErrorMessage } from '../../services/error-messages';
 import routes from '../../routes';
+import Settings from '../../services/api/settings';
 
 class CreateRequestPage extends React.Component {
   state = {
@@ -37,13 +38,20 @@ class CreateRequestPage extends React.Component {
   async onMove () {
     let user = getCurrentUser()
 
+    if (!this.state.licencePlate) {
+      alert('Unesite ispravnu registraciju.')
+      return
+    }
+
     let car = await Cars.getByLicencePlate(this.state.licencePlate.toUpperCase())
     if(!car) {
-      alert('Ne postoji auto sa ovom registracijom! Jos uvek.')
+      alert('Još uvek ne postoji auto sa ovom registracijom!')
       return
     }
 
     let myCar = await Cars.getMyCar()
+
+    let owner = await Settings.getByUserId(car.ownerId)
 
     // let existingRequest = await Requests.getByLicencePlate(this.state.licencePlate.toUpperCase())
     // console.log(existingRequest);
@@ -62,6 +70,11 @@ class CreateRequestPage extends React.Component {
             licencePlate: myCar.licencePlate
           }
         },
+        owner: {
+          settings: {
+            imageUrl: owner.imageUrl
+          }
+        },
         message: this.state.message,
         status: 'pending',
       })
@@ -75,22 +88,22 @@ class CreateRequestPage extends React.Component {
 
   render () {
     return (
-      <div>
-      <h3 className="page__heading">Novi zahtev</h3>
-      <div className="main__content">
+      <div className="new-request-page">
+        <h3 className="page__heading page-header">
+          <div className="title">Novi zahtev</div>
+        </h3>
+        <div className="main__content">
 
-        <LicencePlateInput
-          hideLabel
-          onLicenceChange={e => this.onLicenceChange(e)}
-          value={this.state.licencePlate}
-        />
-
+          <LicencePlateInput
+            hideLabel
+            onLicenceChange={e => this.onLicenceChange(e)}
+            value={this.state.licencePlate}
+          />
+        </div>
         <div className="bottom-buttons">
-            <a href="#">Odustani</a>
+            <Link className="button button-clear" to={routes.HOME_PAGE}>Odustani</Link>
             <button onClick={() => this.onMove()}>POMERI</button>
         </div>
-
-      </div>
       </div>
     )
   }

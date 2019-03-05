@@ -4,13 +4,16 @@ import { getCurrentUser } from '../../services/auth'
 import Messages from '../../services/api/messages'
 import Requests from '../../services/api/requests'
 import Cars from '../../services/api/cars'
-import RequireAccountSetup from '../../components/RequireAccountSetup';
+import requireAccountSetup from '../../components/RequireAccountSetup';
 import LicencePlate from '../../components/LicencePlate';
 import moment from 'moment'
 import routes from '../../routes';
+import requireMyCar from '../../components/RequireMyCar';
+import Loading from '../../components/Loading';
 
 class Home extends React.Component {
   state = {
+    loading: true,
     messages: [],
     myCars: [],
     myRequests: [],
@@ -55,7 +58,8 @@ class Home extends React.Component {
       mySentRequests,
       messages,
       myCars,
-      loginProvider
+      loginProvider,
+      loading: false
     })
 
   }
@@ -65,7 +69,7 @@ class Home extends React.Component {
   }
 
   goToCreateCar () {
-    this.props.history.push(routes.CREATE_CAR_PAGE)
+    this.props.history.push(routes.SETTINGS_PAGE)
   }
 
   goToAnswerRequest(request) {
@@ -77,11 +81,19 @@ class Home extends React.Component {
     this.props.history.push(route)
   }
 
+  goToRequestStatus(request) {
+    let route = routes.WAITING_REQUEST_PAGE.replace(':requestId', request.id)
+    this.props.history.push(route)
+  }
+
   renderNoCarsPage() {
     return (
-      <div>
-        <h2>Nemate ni jedan auto</h2>
-        <button onClick={() => this.goToCreateCar()}>Dodaj auto</button>
+      <div className="no-car-wrap">
+        {/* <h2>Još niste podesili svoj auto</h2> */}
+        <h3 className="page-header page-header--body">
+          <div className="title">Još niste podesili svoj auto</div>
+        </h3>
+        <button onClick={() => this.goToCreateCar()}>Podešavanja</button>
       </div>
     )
   }
@@ -103,7 +115,7 @@ class Home extends React.Component {
                       <div>{moment(request.created).fromNow()}</div>
                       <div>{request.message}</div>
                       <div>
-                        <LicencePlate>{request.car.licencePlate}</LicencePlate>
+                        <LicencePlate hidePlate>{request.car.licencePlate}</LicencePlate>
                       </div>
                       {
                         !!request.response
@@ -116,7 +128,7 @@ class Home extends React.Component {
                       {
                         !request.response
                           && <div className="request__chevron">
-                            <i className="material-icons">chevron_right</i>
+                            <i className="material-icons">chat_bubble_outline</i>
                           </div>
                       }
                     </div>
@@ -125,20 +137,24 @@ class Home extends React.Component {
               }
 
               {
-                (this.state.myRequests.length === 0)
-                  && <div className="no-msgs"><h3>Nikom ne smeta tvoj auto.</h3><h2>za sada...</h2></div>
+                (this.state.myRequests.length === 0) && (
+                  <div className="no-msgs">
+                    <i className="material-icons">check_circle_outline</i>
+                    <h3>Nikome ne smeta tvoj auto</h3>
+                  </div>
+                )
               }
             </div>
 
             : <div>
               {
                 this.state.mySentRequests.map(request => (
-                  <div className="request" key={request.id}>
+                  <div className="request" key={request.id} onClick={() => this.goToRequestStatus(request)}>
                     <div className="request__col">
                       <div>{moment(request.created).fromNow()}</div>
                       <div>{request.message}</div>
                       <div>
-                        <LicencePlate>{request.car.licencePlate}</LicencePlate>
+                        <LicencePlate hidePlate>{request.car.licencePlate}</LicencePlate>
                       </div>
                       <div>
                         {
@@ -153,8 +169,12 @@ class Home extends React.Component {
               }
 
               {
-                (this.state.myRequests.length === 0)
-                  && <div className="no-msgs"><h3>Nije ti smetao niciji auto.</h3><h2>do sada...</h2></div>
+                (this.state.mySentRequests.length === 0) && (
+                  <div className="no-msgs">
+                    <i className="material-icons">check_circle_outline</i>
+                    <h3>Nije ti smetao ničiji auto</h3>
+                  </div>
+                )
               }
             </div>
         }
@@ -169,20 +189,27 @@ class Home extends React.Component {
   }
 
   render () {
+    if (this.state.loading) {
+      return <Loading />
+    }
+
     let user = getCurrentUser()
-    let licencePlate = this.state.myCars.length > 0 ? this.state.myCars[0].licencePlate : null
+    let licencePlate = this.state.myCars.length > 0 ? this.state.myCars[0].licencePlate : '...'
 
     return (
       <React.Fragment>
-
         <div className="content__cover">
-          <img src={user.photoURL} width="100" />
-          <span className="content__username">{user.displayName}</span>
+          <div className="content__cover-inner content__cover-inner--home">
+            <div className="user-info">
+              <img src={user.photoURL} width="100" />
+              <span className="content__username">{user.displayName}</span>
+            </div>
 
-          {
-            !!licencePlate
-              && <LicencePlate>{licencePlate}</LicencePlate>
-          }
+            {
+              !!licencePlate
+                && <LicencePlate>{licencePlate}</LicencePlate>
+            }
+          </div>
         </div>
 
         <div className="tabs requests-tabs">
@@ -192,7 +219,7 @@ class Home extends React.Component {
               tab
               ${this.state.activeTab === 'moja-parkiranja' ? 'tab--active' : ''}
             `}>
-              Moja parkiranja
+              Primljeni
             </div>
           <div
             onClick={() => this.setActiveTab('moji-zahtevi')}
@@ -200,22 +227,24 @@ class Home extends React.Component {
               tab
               ${this.state.activeTab === 'moji-zahtevi' ? 'tab--active' : ''}
             `}>
-              Moji zahtevi
+              Poslani
           </div>
         </div>
 
         <div className="requests__wrap">
           {
-            this.state.myCars.length > 0
+            this.state.myCars.length > 0 && !this.state.loading
               ? this.renderFullPage()
               : this.renderNoCarsPage()
           }
         </div>
 
-        <button className="full-width" onClick={() => this.goToCreateRequest()}>Pomeri i ti nekog</button>
+        <div className="footer-actions">
+          <button className="full-width" onClick={() => this.goToCreateRequest()}>Pomeri nekog</button>
+        </div>
       </React.Fragment>
     )
   }
 }
 
-export default withRouter(RequireAccountSetup(Home))
+export default withRouter(requireMyCar(requireAccountSetup(Home)))
