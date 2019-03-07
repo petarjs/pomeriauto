@@ -21,6 +21,8 @@ class RequestPage extends React.Component {
   async componentDidMount () {
     let responses = await Responses.getAll()
 
+    responses = responses.sort((a, b) => a.index - b.index)
+
     let requestId = this.props.match.params.requestId
     let request = await Requests.getById(requestId)
 
@@ -39,6 +41,7 @@ class RequestPage extends React.Component {
     await Requests.updateRequest(requestId, {
       response: response.text,
       status: 'answered',
+      answered: new Date().valueOf()
     })
 
     this.props.history.push(routes.HOME_PAGE)
@@ -84,7 +87,7 @@ class RequestPage extends React.Component {
 
                 <div className="car-info">
                   {
-                    this.state.request.owner && (
+                    (this.state.request.owner && this.state.request.owner.settings) && (
                       <img className="profile-image" src={this.state.request.owner.settings.imageUrl} alt=""/>
                     )
                   }
@@ -95,27 +98,45 @@ class RequestPage extends React.Component {
           </div>
 
           <div className="request-body">
+
+            <div className="request-time">
+              <div>
+                <i className="material-icons">save_alt</i>
+                Zahtev primljen {moment(this.state.request.created).fromNow()}
+              </div>
+            </div>
+
             {
-              !!this.state.request.requester && (
-                <img className="profile-image" src={this.state.request.requester.settings.imageUrl} alt=""/>
+              !!this.state.request.answered && (
+                <div className="request-time">
+                  <div>
+                    <i className="material-icons">done</i>
+                    Odogoreno {moment(this.state.request.created).fromNow()}
+                  </div>
+                </div>
               )
             }
 
-            {/* <div>Vreme: {new Date(this.state.request.created).toLocaleString()}</div> */}
-            <div>Zahtev poslan {moment(this.state.request.created).fromNow()}</div>
+            {
+              (this.state.request.status !== 'answered') && (
+                <React.Fragment>
+                  <div className="response-title">Dolazim za</div>
 
-            <div className="w-100">
-              {
-                this.state.responses.map(
-                  response =>
-                    <button
-                      key={response.id}
-                      className="full-width button-outline"
-                      onClick={() => this.onAnswerRequest(response)}
-                    >{response.text}</button>
-                )
-              }
-            </div>
+                  <div className="w-100">
+                    {
+                      this.state.responses.map(
+                        response =>
+                          <button
+                            key={response.id}
+                            className="full-width"
+                            onClick={() => this.onAnswerRequest(response)}
+                          >{response.text}</button>
+                      )
+                    }
+                  </div>
+                </React.Fragment>
+              )
+            }
           </div>
 
           <div className="footer-actions">

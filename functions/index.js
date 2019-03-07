@@ -26,8 +26,8 @@ exports.onNotifyMoveRequest = functions
                     if (data.deviceId) {
                         admin.messaging().send({
                             notification: {
-                                title: 'PAZNJA - POMERITE AUTO!',
-                                body: `Nekome ste blokirali auto - ${request.message}`,
+                                title: 'PAŽNJA - POMERITE AUTO!',
+                                body: `Blokirali ste auto ${request.requester.car.licencePlate} - ${request.message}`,
                             },
                             apns: {
                                 headers: {
@@ -52,8 +52,8 @@ exports.onNotifyMoveRequest = functions
                     if(data.webDeviceId) {
                         let message = {
                             notification: {
-                                title: 'PAZNJA - POMERITE AUTO!',
-                                body: `Nekome ste blokirali auto - ${request.message}`,
+                                title: 'PAŽNJA - POMERITE AUTO!',
+                                body: `Blokirali ste auto ${request.requester.car.licencePlate} - ${request.message}`,
                             },
                             token: data.webDeviceId,
                             webpush: {
@@ -61,7 +61,13 @@ exports.onNotifyMoveRequest = functions
                                     Urgency: 'high'
                                 },
                                 fcm_options: {
-                                    'link': `https://pomeriauto.com/#/answer-request/${context.params.requestId}`
+                                    'link': `https://pomeriauto.com/#/zahtev/${context.params.requestId}`,
+                                    icon: '/logo.png',
+                                },
+                                "notification": {
+                                    body: `Blokirali ste auto ${request.requester.car.licencePlate} - ${request.message}`,
+                                    "requireInteraction": "true",
+                                    icon: '/logo.png',
                                 }
                             }
                         }
@@ -139,7 +145,12 @@ exports.onNotifyMoveResponse = functions
                                         Urgency: 'high'
                                     },
                                     fcm_options: {
-                                        'link': `https://pomeriauto.com`
+                                        'link': `https://pomeriauto.com`,
+                                    },
+                                    "notification": {
+                                        "body": `${request.response}`,
+                                        "requireInteraction": "true",
+                                        icon: '/logo.png',
                                     }
                                 }
                             }

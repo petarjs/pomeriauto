@@ -64,7 +64,7 @@ class waitingRequestPage extends React.Component {
 
               <div className="car-info">
                 {
-                  this.state.request.owner && (
+                  (this.state.request.owner && this.state.request.owner.settings) && (
                     <img className="profile-image" src={this.state.request.owner.settings.imageUrl} alt=""/>
                   )
                 }

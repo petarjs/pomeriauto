@@ -73,10 +73,6 @@ class Home extends React.Component {
   }
 
   goToAnswerRequest(request) {
-    if (request.response) {
-      return
-    }
-
     let route = routes.REQUEST_PAGE.replace(':requestId', request.id)
     this.props.history.push(route)
   }

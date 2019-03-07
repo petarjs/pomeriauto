@@ -35,7 +35,9 @@ class CreateRequestPage extends React.Component {
     })
   }
 
-  async onMove () {
+  async onMove (event) {
+    event.preventDefault()
+
     let user = getCurrentUser()
 
     if (!this.state.licencePlate) {
@@ -72,7 +74,7 @@ class CreateRequestPage extends React.Component {
         },
         owner: {
           settings: {
-            imageUrl: owner.imageUrl
+            imageUrl: owner.imageUrl || ''
           }
         },
         message: this.state.message,
@@ -92,18 +94,22 @@ class CreateRequestPage extends React.Component {
         <h3 className="page__heading page-header">
           <div className="title">Novi zahtev</div>
         </h3>
-        <div className="main__content">
 
-          <LicencePlateInput
-            hideLabel
-            onLicenceChange={e => this.onLicenceChange(e)}
-            value={this.state.licencePlate}
-          />
-        </div>
-        <div className="bottom-buttons">
-            <Link className="button button-clear" to={routes.HOME_PAGE}>Odustani</Link>
-            <button onClick={() => this.onMove()}>POMERI</button>
-        </div>
+        <form className="new-request-form" action="/" onSubmit={e => this.onMove(e)}>
+          <div className="main__content">
+
+            <LicencePlateInput
+              hideLabel
+              autofocus
+              onLicenceChange={e => this.onLicenceChange(e)}
+              value={this.state.licencePlate}
+            />
+          </div>
+          <div className="bottom-buttons">
+              <Link className="button button-clear" to={routes.HOME_PAGE}>Odustani</Link>
+              <button type="submit">POMERI</button>
+          </div>
+        </form>
       </div>
     )
   }

@@ -16,6 +16,7 @@ class SettingsPage extends React.Component {
         carFilename: '',
         progress: 0,
         carURL: '',
+        car: null
     }
 
     async componentDidMount () {
@@ -71,8 +72,9 @@ class SettingsPage extends React.Component {
 
                 let carId = this.state.car.id
                 await Cars.setImage(carId, url)
+                let car = await Cars.getMyCar()
 
-                this.setState({ loading: false })
+                this.setState({ loading: false, car })
             });
     };
 
@@ -109,7 +111,7 @@ class SettingsPage extends React.Component {
                         </div>
 
                         <div>
-                            {this.state.car.imageUrl && <img className="car__image" alt="Car" src={this.state.car.imageUrl} />}
+                            {(this.state.car && this.state.car.imageUrl) && <img className="car__image" alt="Car" src={this.state.car.imageUrl} />}
 
                             <div className="settings-actions">
                                 <CustomUploadButton

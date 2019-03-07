@@ -11,7 +11,7 @@ export default class Requests {
       let data = []
       collection
         .where('car.ownerId', '==', user.uid)
-        .orderBy('created', 'desc').limit(5)
+        .orderBy('created', 'desc').limit(10)
         .get().then(function(querySnapshot) {
           querySnapshot.forEach(function(doc) {
             data.push({
@@ -33,7 +33,7 @@ export default class Requests {
       let data = []
       collection
         .where('requesterId', '==', user.uid)
-        .orderBy('created', 'desc').limit(5)
+        .orderBy('created', 'desc').limit(10)
         .get().then(function(querySnapshot) {
           querySnapshot.forEach(function(doc) {
             data.push({
